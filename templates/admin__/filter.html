@@ -1,0 +1,16 @@
+﻿{% load i18n %}
+<script>
+function redirect ()
+{
+    location.href = this.options[this.selectedIndex].value;
+}
+</script>
+
+<h3>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
+<select id="URL" onchange="redirect.call(this);">
+{% for choice in choices %}
+    
+        <option{% if choice.selected %} selected{% endif %} value="{{ choice.query_string|iriencode }}">{{ choice.display }}</a></option>
+    
+{% endfor %}
+</select>

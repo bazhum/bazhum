@@ -1,0 +1,144 @@
+{% include templ.header %}
+
+<div id="langs" style="display: none">
+	{% for k,v in langs %}
+	<option name="{{ k }}" {% if k = 'PL' %}selected{% endif %} value="{{ k }}">{{ v }}</option>
+	{% endfor %}
+</div>
+
+      <div id="content_conteiner" class="wrap">
+          
+        <div class="part_width">
+          <div class="wrap">
+            <div class="meta_column">
+              <h1>Wyszukiwanie zaawansowane</h1>
+               <br>
+               <div id="advanced_search_conteiner">
+                  <form method="GET" action="{% url 'bib.views.searchResults' %}">
+				  <input type="hidden" name="fieldCnt" value="3" id="fieldCnt" />
+                    <p class="line">Znajdź rekordy spełniające&nbsp;&nbsp;
+                       <span class="select_wrap">
+                      <select name="mode">
+                        <option value="any">którekolwiek</option>
+                        <option value="all">wszystkie</option>
+                      </select>
+                    </span>&nbsp;&nbsp;warunki
+                    </p>
+               
+                    
+                    <ul id="search_elements_conteiner">
+                      <li>
+                        <span class="label_select" id="div_f">
+                           <span class="select_wrap">
+                            <select name="typeField" id="typeField">
+                              <option selected value="any">Dowolne pole</option>
+                              <option value="title">Tytuł</option>
+                              <option value="author">Autor</option>
+                              <option value="jrl">Tytuł czasopisma</option>
+                              <option value="date">Data wydania</option>
+                              <option value="lang">Język</option>
+                            </select>
+                          </span>
+                        </span>
+                        <span class="search_column" id="div_sc">
+                          <span class="plus_minus">
+                            <!-- <a href="#" class="minus button" title="">-</a> -->
+                            <a href="#" class="plus button" id="pb" title="">+</a>
+                          </span>
+                          <span class="input_wrap"> <input autocomplete="off" type="text" name="valueField" id="valueField" value="" placeholder=""></span>
+                          
+                        </span>
+                      </li>
+                      <li>
+                        <span class="label_select" id="div_f">
+
+                           <span class="select_wrap">
+                            <select name="typeField" id="typeField">
+                              <option value="any">Dowolne pole</option>
+                              <option value="title">Tytuł</option>
+                              <option value="author">Autor</option>
+                              <option value="jrl">Tytuł czasopisma</option>
+                              <option selected value="date">Data wydania</option>
+                              <option value="lang">Język</option>
+                            </select>
+                          </span>
+                        </span>
+                        <span class="search_column" id="div_sc">
+
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" id="pb" title="">+</a>
+                            <a href="#" class="minus button" id="mb" title="">-</a>
+                          </span>
+
+                          <span class="input_wrap year">
+                            Od roku&nbsp;&nbsp;<input autocomplete="off" type="text" name="valueField" id="valueField" value="" placeholder="">&nbsp;&nbsp;do&nbsp;&nbsp;
+                            <input autocomplete="off" type="text" name="valueField" id="valueField" value="" placeholder="">
+                          </span>
+
+                        </span>
+                      </li>
+                      <li>
+                        <span class="label_select" id="div_f">
+                           <span class="select_wrap">
+                            <select name="typeField" id="typeField">
+                              <option selected value="any">Dowolne pole</option>
+                              <option value="title">Tytuł</option>
+                              <option value="author">Autor</option>
+                              <option value="jrl">Tytuł czasopisma</option>
+                              <option value="date">Data wydania</option>
+                              <option selected value="lang">Język</option>
+                            </select>
+                          </span>
+                        </span>
+                        <span class="search_column" id="div_sc">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" id="pb" title="">+</a>
+                            <a href="#" class="minus button" id="mb" title="">-</a>
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap">
+                              <select autocomplete="off" name="valueField" id="valueField">
+                                  {% for k,v in langs %}
+                                    <option name="{{ k }}" {% if k = 'PL' %}selected{% endif %} value="{{ k }}">{{ v }}</option>
+                                    {% endfor %}
+                                </select>
+                            </span>
+                          </span>
+                        </span>
+                      </li>
+                    </ul>
+                    <br>
+                    <p class="line right_button">
+                      <input class="big_button" type="submit" name="" value="Szukaj">
+                    </p>
+
+                  </form>
+                </div> 
+              
+          </div>
+              </div>
+
+        </div>
+
+        <div id="sidebar" class="filter">
+
+            <h2>Jak szukać?</h2>
+            <div class="small">
+            <p>Oddziel słowa spacją, aby wyszukać rekordy ze wszystkimi słowami: <br>
+            <span class="mono">historia średniowiecze</span></p>
+    
+            <p>Wpisz wyrażenie w cudzysłowach, aby wyszukać rekordy zawierające daną frazę: <br>
+            <span class="mono">“rocznik historyczny”</span></p>
+            <p>
+            Wstaw operator OR między słowa, aby wyszukać rekordy zawierające którekolwiek z nich:<br>
+            <span class="mono">rocznik OR studia</span></p>
+            <p>
+            Umieść minus przed niepożądanymi słowami:<br>
+            <span class="mono">-średniowiecze</span></p>
+          </div>
+          </div>
+
+      
+</div>
+</body>
+</html>

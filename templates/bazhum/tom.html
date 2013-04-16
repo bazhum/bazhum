@@ -1,0 +1,105 @@
+{% include templ.header %}
+      <div id="content_conteiner" class="wrap">
+          <div class="meta_column">
+              <h1><a href="{% url 'bib.views.showJournal' jrl.id %}">{{ jrl }}</a><br> <span class="regular">
+              {% if volume %}
+                Tom {{ volume.getName }}
+              {% endif %}
+              ({{ year.getName }})</span></h1>
+              <p class="data_block"><span class="bold">{{ jrl.getSecondName }}</span> <br>
+              {{ jrl.getContributor }}<br>
+              {% if jrl.issn %}ISSN {{ jrl.issn|default:"" }}{% endif %}</p>
+              <div class="wrap">
+                 {% include templ.social %}
+              </div>
+          </div>
+
+          <div class="clear"></div>
+
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                  <div class="wrap"> 
+                  <div class="margin_check">
+                    <input type="checkbox" name="checkboxMain" id="checkboxMain" value="value" />
+                  </div> 
+                    {% include templ.export %}
+
+                  <p class="go_top"><a href="#" title="">do góry</a></p>
+                </div>
+                <hr>
+              </div></div>
+            </div>
+          </div> 
+
+        
+          <ul class="table_content full_width"> 
+          {% if numbers|length > 0 %}
+          {% for nn in numbers %}
+            <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  <input class="check" type="checkbox" name="checkboxN" value="{{ nn.id }}" />
+                </div>   
+                <div class="links_box">
+                  <h2><a href="{% url 'bib.views.showNumber' nn.id %}" title="">{{ nn.getName }}</a></h2>           
+                </div>
+              </div>
+              
+        
+              <div class="subul_wrap line">
+                <ul>
+
+                {% for a in articles %}
+                {% if a.number_id = n %}
+                  <li class="line"> 
+                    <div class="margin_check">
+                      <input class="check" type="checkbox" name="checkboxA" value="{{ a.id }}" />
+                    </div>
+                    <div class="links_box">
+                    <h3><a href="{% url 'bib.views.showArticle' a.id %}" title="">{{ a.name }}</a></h3>
+                    <p>
+                    {% for author in a.authors %}{% spaceless %}
+                    <a href="{% url 'bib.views.searchResults' %}?fa={{ author.id }}" title="">{{ author.firstname.strip }} {{ author.surname.strip }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endspaceless %}{% endfor %}
+                    </p>              
+                  </div>
+                  </li>
+
+                {% endif %}
+                {% endfor %}
+                  
+                </ul>
+              </div> 
+        
+            
+            </li>
+            {% endfor %}
+            {% else %}
+                {% for a in articles %}
+                
+            <li class="line">
+            
+
+            <div class="wrap"> 
+                    <div class="margin_check">
+                      <input class="check" type="checkbox" name="checkboxA" value="{{ a.id }}" />
+                    </div>
+                    <div class="links_box">
+                    <h3><a href="{% url 'bib.views.showArticle' a.id %}" title="">{{ a.name }}</a></h3>
+                    <p>{% for author in a.authors %}
+                    <a href="{% url 'bib.views.searchResults' %}?fa={{ author.id }}" title="">{{ author.firstname.strip }} {{ author.surname.strip }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}</p>              
+                  </div>
+                   </div>
+
+            </li>
+                
+                {% endfor %}
+            {% endif %}
+                
+          </ul>
+</div>
+</body>
+</html>
