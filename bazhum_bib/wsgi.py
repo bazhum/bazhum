@@ -17,8 +17,6 @@ import os
 import sys
 
 #root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-sys.path.insert(0, '/srv/www/python/django-1.5-env/www/bazhum_bib')
-sys.path.insert(0, '/srv/www/python/django-1.5-env/lib/python2.6/site-packages')
 #sys.path.insert(0, os.path.abspath(os.path.join(root_path, 'app', 'webapp')))
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
@@ -34,6 +32,13 @@ os.environ["DJANGO_SETTINGS_MODULE"] = "bazhum_bib.settings"
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
+#from dozer import Dozer
+#application = Dozer(application)
+
+#from dozer import Profiler
+#application = Profiler(application, profile_path='/tmp/profiles')
+
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
+

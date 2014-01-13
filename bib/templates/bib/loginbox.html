@@ -1,0 +1,26 @@
+{% load staticfiles %}
+{% load i18n %}	
+         <ul id="user_menu" class="menu">
+         	<li>
+     			<form style="display: inline" action="{% url 'set_language' %}" method="post">
+				{% csrf_token %}
+				
+				<select name="language">
+				{% get_language_info_list for LANGUAGES as languages %}
+				{% for language in languages %}
+				<option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+				{{ language.name_local }} ({{ language.code }})
+				</option>
+				{% endfor %}
+				</select>
+				<input type="submit" value="Go" />
+				</form> &nbsp;
+			</li>
+      {% if not user.is_authenticated %}     
+          <li><a class="login_link" href="#" title="">{% trans 'Zaloguj się' %}</a></li>
+          <li><a class="register_link" href="#" title="">{% trans 'Załóż konto' %}</a></li>
+     {% else %}
+ 		  <li><a href="{% url 'bib.views.e_shelf' %}" title=""><span class='bold'>{% trans 'E-półka' %}</span> (<span id="eshelf_count">{{ ehself_count }}</span>)</a></li>
+          <li><a href="{% url 'bib.views.logoutView' %}" title="">{% trans 'Wyloguj' %}</a></li>
+     {% endif %}
+         </ul> 

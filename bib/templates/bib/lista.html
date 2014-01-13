@@ -1,0 +1,68 @@
+{% include templ.header %}
+{% load i18n %}
+      <div id="content_conteiner" class="wrap">
+        <br>
+        <div class="mobile_alphabet">
+            <div class="select_wrap">
+            <select name="">
+        	{% for a in alph %}
+              {% if a in activeLetters %}
+              <option value="{{ a }}">{{ a }}</option>
+              {% endif %}
+            {% endfor %}
+            </select>
+            </div>
+          </div>
+          <div id="top_alphabet" class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                  <div class="wrap"> 
+                  <div class="margin_check">
+             &nbsp;
+                  </div> 
+                  <div class="links_box full">
+                      <ul id="alphabet_menu" class="horisontal_big">
+                      {% for a in alph %}
+                        {% if a in activeLetters %}
+                        <li><a {% if a = 'A' %}class="active"{% endif %} href="" attr-letter="{{ a }}" title="">{{ a }}</a></li>
+                        {% else %}
+                        <li class="disabled"><a href="" title="">{{ a }}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      </ul>
+
+                  </div>
+
+                  <p class="go_top"><a href="#" title="">{% trans 'do góry' %}</a></p>
+                </div>
+                <hr>
+              </div></div>
+            </div>
+          </div> 
+
+          <ul class="table_content alphabet full_width">  
+          
+          {% for a in alph %}
+          {% if a in activeLetters %}
+          
+            <li attr-letter="{{ a }}" class="line"><h1>{{ a }}</h1>
+            <ul>    
+            {% for l, journal in records.iteritems %}
+            {% if l = a %}
+            {% for j in journal %}
+              <li class="line">
+                  <div class="links_box">
+                    <h2><a href="{% url 'bib.views.showJournal' j.par_id_id|default:"1" %}" title="">{{ j.name }}</a></h2>
+                  </div>
+              </li>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+      </ul>
+{% include templ.footer %}

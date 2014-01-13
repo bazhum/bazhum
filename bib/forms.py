@@ -1,6 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 from django.forms import *
 from django.conf import settings
+from django.contrib.auth.models import User
+
 from ajax_filtered_fields.forms import *
 
 from bib.models import *
@@ -31,3 +33,33 @@ class VolumeForm(baseForm):
     
 class YearForm(baseForm): 
     journal_id = AjaxForeignKeyField(Journal, baseForm.lookups)    
+    
+class JournalMapForm(baseForm):
+    idjrl = AjaxForeignKeyField(Journal, baseForm.lookups)
+    iduser = AjaxForeignKeyField(User, baseForm.lookups)
+    
+class registrationForm(forms.Form):
+    username = CharField(required=True, max_length=255, widget=TextInput(attrs={'required':''}))
+    email = EmailField(required=True, max_length=255, widget=TextInput(attrs={'required':''}))
+    password = CharField(required=True,widget=PasswordInput(attrs={'required':''}))
+    password2 = CharField(required=True,widget=PasswordInput(attrs={'required':''}))
+    
+class loginForm(forms.Form):
+    username = CharField(required=True, max_length=255, widget=TextInput(attrs={'required':''}))
+    password = CharField(required=True,widget=PasswordInput(attrs={'required':''}))
+    
+class passwordResetForm(forms.Form):
+    username = EmailField(required=True, max_length=255, widget=TextInput(attrs={'required':''}))
+    password = CharField(required=True,widget=PasswordInput(attrs={'required':''}))
+    password2 = CharField(required=True,widget=PasswordInput(attrs={'required':''}))
+    
+    def clean(self):
+        cleaned_data = super(passwordResetForm, self).clean()
+        pass1 = cleaned_data.get("password")
+        pass2 = cleaned_data.get("password2")
+        if pass1 and pass2:
+            if pass1 != pass2:
+                raise forms.ValidationError("Hasła muszą być identyczne.")
+
+        # Always return the full collection of cleaned data.
+        return cleaned_data

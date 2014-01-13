@@ -1,0 +1,118 @@
+{% include templ.header %}
+      <div id="content_conteiner" class="wrap">      	
+          
+        <div class="part_width">
+          <div class="wrap">
+ 
+          <div id="results_header">
+
+          <div class="margin_check"> <h2>Wyniki</h2>
+          </div>
+          <div class="links_box">
+          {% for af in activeFilters %}
+            <span class="filter_button">
+              {{ af.name }} : {{ af.obj }} <a href="{{ af.url }}" class="closer" title=""></a> 
+            </span>
+          {% endfor %}
+          </div>
+          </div>
+          
+          <div class="clear"></div>
+
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                    <div class="wrap"> 
+                    <div class="margin_check">
+                      <input type="checkbox" name="checkboxMain" id="checkboxMain" value="value" />
+                    </div> 
+                    {% include templ.export %}
+
+                    <p class="go_top"><a href="#" title="">do góry</a></p>
+                    </div>
+                     <hr>
+                </div>
+              </div>
+            </div>
+          </div> 
+            {{ deb }}
+          <ul pageNo=1 class="table_content full_width"> 
+		  {% for article in qs %}
+            <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  <input class="check" type="checkbox" name="checkbox" value="{{ article.pk }}" />
+                </div>   
+                <div class="links_box">
+                  <h2><a href="{% url 'bib.views.showArticle' article.pk %}" title="">{{ article.getNameClean }}</a></h2>
+                  <p>
+                  {% for author in article.getAuthors %}
+                  <a href="" title="">{{ author.customTitleFiled }}</a>{% if not forloop.last %},{% endif %}
+                  {% if forloop.last %}<br/>{% endif %}
+                  {% endfor %}
+                    {% if article.idjrl_id %}
+                    <a href="{% url 'bib.views.showJournal' article.idjrl_id %}" title="">{{ article.journal }}</a>
+                    {% endif %}
+                    {% if article.idvol_id %}
+                    {% if article.volume and article.number%}, {% endif %}<a href="{% url 'bib.views.showVolume' article.idvol_id %}" title="">{{ article.volume }}</a>
+                    {% endif %}
+                    {% if article.idno_id %}
+                        /<a href="{% url 'bib.views.showNumber' article.idno_id %}" title="">{{ article.number }}</a> 
+                    {% endif %}
+                    {% if article.idyear_id %}
+                    (<a href="{% if article.idvol_id %}{% url 'bib.views.showVolume' article.idvol_id %}{% endif %}" title="">{{ article.year }}</a>)  
+                    {% endif %}
+                    {{ article.getPagesString }}
+                     </p>                                   
+                </div>
+              </div>
+            </li>
+		  {% endfor %}
+          </ul>
+        </div>
+   
+
+          </div>
+
+          <div id="sidebar" class="filter">
+
+            <h2>Zawęź wyniki</h2>
+
+            <h3 class="line">Czasopismo:</h3>
+            <ul class="filter_ul" id="filter_journals">
+              {% for fj in filters.filterJournal %}
+                <li {% if fj.0|slugify in activeFiltersVals %} class="active"{% endif %}><a href="{{ request.get_full_path }}&fj={{ fj.0 }}" title="">{{ fj.1 }} ({{ fj.2 }})</a></li>
+              {% endfor %}
+            </ul>
+            <p class="more" id="more_journal" ><a href="#" title="">więcej &hellip;</a></p>
+            <h3 class="line">Autor:</h3>            
+            <ul class="filter_ul" id="filter_authors">
+              {% for fa in filters.filterAuthor %}
+                <li {% if fa.0 in activeFiltersVals %} class="active"{% endif %}><a href="{{ request.get_full_path }}&fa={{ fa.0 }}" title="">{{ fa.0 }} ({{ fa.1 }})</a></li>
+              {% endfor %}
+            </ul>
+            <p class="more" id="more_auth" ><a href="#" title="">więcej &hellip;</a></p>
+
+            <h3 class="line">Data wydania:</h3>
+            <form method="GET" action="{{ request.get_full_path }}">
+            {% for k,v in request.GET.iteritems %}
+                <input type="hidden" name="{{ k }}" value="{{ v }}" /> 
+            {% endfor %}
+            <p class="line years">Między&nbsp;&nbsp;<input type="text" name="fFrom" id="fFrom" value="" placeholder="">&nbsp;&nbsp;a&nbsp;&nbsp;<input type="text" name="fTo" id="fTo" value="" placeholder=""></p>
+                    <p class="right_button"><input type="submit" name="" id="zawezOkres" value="Zawęź"> </p>
+                </form>
+
+                    <h3 class="line">Język:</h3>
+            <ul class="filter_ul" id="filter_lang">
+              {% for fl in filters.filterLang %}
+                <li {% if fl.0 in activeFiltersVals %} class="active"{% endif %}><a href="{{ request.get_full_path }}&fl={{ fl.0 }}" title="">{{ fl.0 }} ({{ fl.1 }})</a></li>              
+              {% endfor %}
+            </ul>
+            <p class="more" id="more_lang" ><a href="#" title="">więcej &hellip;</a></p>
+
+            <p class="line">
+              <a href="/bib/rss/?{{ request.GET.urlencode }}" title=""><img class="icon_img" width="13" height="13" src="{{ meta.images.rss }}" alt="">Subskrybuj wyniki</a>
+            </p>
+
+{% include templ.footer %}

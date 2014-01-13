@@ -1,0 +1,5 @@
+Kliknij poniższy link aby aktywować konto.
+
+http://{{ site }}{% url 'bib.views.activate' activation_key %}
+
+Jeżeli nie rejestrowałeś się na naszej stronie możesz zignorować tego maila.

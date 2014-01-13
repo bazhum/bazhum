@@ -1,0 +1,149 @@
+{% load staticfiles %}
+{% load i18n %}
+
+
+</div>    
+    
+      <div id="footer">
+        <hr>
+        <div class="wrap">
+          <div class="mhp_logo">
+              <p class="small">
+
+                <a href="http://www.muzhp.pl/" target="_blank" title="">
+                  <img class="mhp_logo_img" src="{% static meta.images.logomhp %}" alt="">
+                {% trans "Muzeum Historii" %} <br>
+                {% trans "Polski w Warszawie" %}</a>
+            </p>
+          </div>
+          <ul id="footer_menu" class="bold menu">
+            <li>
+              <a href="{% url 'bib.views.about' %}" title="">{% trans "O projekcie" %}</a>
+            </li>
+            <li>
+              <a href="http://czasopisma.bazhum.hist.pl" target="_blank" title="">{% trans "Oferta dla wydawców" %}</a>
+            </li>
+        </ul>
+
+        <div class="design_note">
+          <p class="small">
+                  {% trans "Materiały zamieszczone na stronie są dostępna na licencji" %}  <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pl">CC BY-SA</a> <br>
+                  {% trans "Projekt graficzny serwisu:" %} <a href="http://veshch.com/" target="_blank">Veshch</a>
+          </p>
+        </div>
+
+        </div>
+      </div>
+  </div>
+
+  <div class="popup register_popup">
+	<form id="register_form" method="post" action="{% url 'bib.views.registerView' %}"> {% csrf_token %}
+        <div class="popup_window">
+          <h2>{% trans 'Załóż konto' %}</h2>
+          <hr>
+
+          <div class="popup_content">
+
+            <div class="form_row">
+              <div class="label_col">
+                {% trans 'Nazwa' %}: 
+              </div>
+              <div class="input_col">
+              	{{ meta.forms.registration.username }}
+                <div class="error_comment name error"></div>
+              </div>
+            </div>
+
+            <div class="form_row">
+              <div class="label_col">
+                {% trans 'Adres e-mail' %}: 
+              </div>
+              <div class="input_col">
+                {{ meta.forms.registration.email }}
+                <div class="error_comment email error"></div>   
+              </div>
+            </div>
+
+            <div class="form_row">
+              <div class="label_col">
+                {% trans 'Hasło' %}: 
+              </div>
+              <div class="input_col">
+                {{ meta.forms.registration.password }}
+                <div class="error_comment pass error"></div>   
+              </div>
+            </div>
+            <div class="form_row">
+              <div class="label_col">
+                {% trans 'Powtórz hasło' %}: 
+              </div>
+              <div class="input_col">
+                {{ meta.forms.registration.password2 }}   
+              </div>
+            </div>
+
+          </div>
+
+          <div class="buttons_conteiner">
+            <div class="buttons_wrap">
+              <input id="create_account" type="submit" name="" value="{% trans 'Załóż konto' %}">             
+            </div>
+          </div>
+
+          <div class="forget_password">
+            <a id="popupLogowanie" href="#" title="">{% trans 'Logowanie' %}</a>
+          </div>
+
+          <div class="popup_closer"></div>
+        </div>
+        <div class="popup_overlay"></div>
+       </form>
+  </div>
+  
+  <div class="popup login_popup">
+        <div class="popup_window">
+        	<form method="post" action="{% url 'bib.views.loginView' %}" >{% csrf_token %}
+          <h2>{% trans 'Zaloguj się' %}</h2>
+          <hr>
+
+          <div class="popup_content">
+
+            <div class="form_row">
+              <div class="label_col">
+                {% trans 'Login' %}: 
+              </div>
+              <div class="input_col">
+                {{ meta.forms.login.username }} 
+              </div>
+            </div>
+
+            <div class="form_row">
+              <div class="label_col">
+                {% trans 'Hasło' %}: 
+              </div>
+              <div class="input_col">
+                {{ meta.forms.login.password }}   
+              </div>
+            </div>
+
+          </div>
+
+          <div class="buttons_conteiner">
+            <div class="buttons_wrap">
+              <input type="submit" name="" value="{% trans 'Zaloguj' %}">             
+            </div>
+          </div>
+
+          <div class="forget_password">
+            <a href="{% url 'bib.views.passwordReset' %}" title="">{% trans 'Zapomniałem hasła' %}</a>
+          </div>
+
+          <div class="popup_closer"></div>
+        </div>
+        <div class="popup_overlay"></div>
+        </form>
+  </div>  
+
+</body>
+</html>
+

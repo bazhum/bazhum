@@ -1,0 +1,18 @@
+{% for article in articles %}
+		  <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  <input class="check" type="checkbox" name="checkbox" value="{{ article.id }}" />
+                </div>   
+                <div class="links_box">
+                  <h2><a href="{% url 'bib.views.showArticle' article.id %}" title="">{{ article.title1 }}</a></h2>
+                  <p>
+                  	{% for author in article.getAuthors %}
+                  	<a href="{% url 'bib.views.searchResults' %}?fa={{ author.id }}" title="">{{ author.firstname }} {{ author.surname }}</a>{% if not forloop.last %}, {% endif %}
+                  	{% endfor %}
+                  	<br/>
+<a href="{% url 'bib.views.showJournal' article.idjrl.pk %}" title="">{{ article.journal }}</a>, {% if article.idvol %}<a href="{% url 'bib.views.showVolume' article.idvol.pk %}" title="">{{ article.volume }}</a>{% endif %}{% if article.idvol and article.idno %}/{% endif %}{%if article.idno %}<a href="{% url 'bib.views.showNumber' article.idno.pk %}" title="">{{ article.number }}</a>{% endif %} {% if article.year %}(<a href="{% url 'bib.views.showVolume' article.idvol.pk %}" title="">{{ article.year }}</a>){% endif %}  {{ article.getPagesString }}</p>              
+                </div>
+              </div>
+            </li>     
+{% endfor %}

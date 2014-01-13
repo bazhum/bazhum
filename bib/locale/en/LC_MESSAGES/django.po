@@ -1,0 +1,505 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-21 23:59+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: filters.py:11
+msgid "journal"
+msgstr ""
+
+#: filters.py:37
+msgid "year"
+msgstr ""
+
+#: filters.py:62
+msgid "volume"
+msgstr ""
+
+#: filters.py:86
+msgid "number"
+msgstr ""
+
+#: views.py:85
+msgid "Wybierz format"
+msgstr "Choose format"
+
+#: views.py:665
+msgid "Pomyślnie zalogowałeś się do systemu"
+msgstr "You are now logged in"
+
+#: templates/admin/change_list.html:41 templates/admin/bib/change_form.html:21
+msgid "Home"
+msgstr ""
+
+#: templates/admin/change_list.html:58
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: templates/admin/change_list.html:67 templates/admin/bib/change_form.html:46
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin/change_list.html:78
+msgid "Filter"
+msgstr ""
+
+#: templates/admin/filter.html:9
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: templates/admin/bib/change_form.html:24
+msgid "Add"
+msgstr ""
+
+#: templates/admin/bib/change_form.html:34
+msgid "History"
+msgstr ""
+
+#: templates/admin/bib/change_form.html:35
+msgid "View on site"
+msgstr ""
+
+#: templates/bib/about.html:5
+msgid ""
+"<h1><span class=\"regular\">Baza bibliograficzna <span class=\"nowrap_wide"
+"\">czasopism humanistycznych</span> \n"
+"i&nbsp;społecznych</span>&nbsp;BazHum</h1>"
+msgstr ""
+"<h1><span class=\"regular\">Bibliographic database <span class=\"nowrap_wide"
+"\">of journals from humanities</span> \n"
+"and&nbsp;humanistic social studies</span>&nbsp;BazHum</h1>"
+
+#: templates/bib/about.html:8
+msgid ""
+"<p class=\"line\">\n"
+"                BazHum to baza bibliograficzna polskich naukowych czasopism "
+"humanistycznych i&nbsp;społecznych. Baza gromadzi metadane bibliograficzne: "
+"rejestruje całą zawartość czasopism — od pierwszych numerów do bieżących. "
+"Twórcą kolekcji jest Muzeum Historii Polski w Warszawie.\n"
+"              </p>\n"
+"              <p class=\"\">\n"
+"                Ministerstwo Nauki i Szkolnictwa Wyższego w swoim "
+"komunikacie z dnia 29 maja 2013 r. w sprawie kryteriów i trybu oceny "
+"czasopism naukowych umieściło bazę BazHum na liście baz referencyjnych "
+"uwzględnianych przy ocenianiu i ewaluacji czasopism. \n"
+"Obecność czasopisma naukowego w bazie referencyjnej jest jedną z kluczowych "
+"wytycznych branych pod uwagę przy punktowaniu czasopism.\n"
+"              </p>\n"
+"              <br>\n"
+"              <div class=\"wrap\">\n"
+"                <div class=\"two_column\">\n"
+"                  <h2 class=\"line\">Cele</h2>\n"
+"                  <p class=small>\n"
+"                  BazHum jest narzędziem wspierającym badania naukowe i "
+"edukację. Dzięki umieszczaniu pełnej bibliografii czasopism w bazie znacznie "
+"prostsze jest pozyskiwanie, porządkowanie, agregowanie i przekazywanie "
+"wartościowych informacji. Czynności te wymagają mniej czasu i zapewniają "
+"bardziej precyzyjne wyniki. </p>\n"
+"                </div>\n"
+"                <div class=\"two_column\">\n"
+"                  <h2 class=\"line\">Standardy</h2>\n"
+"                  <p class=small>Opisy bibliograficzne dla każdego artykułu "
+"z osobna tworzone są w formacie MARC 21. Każdy z opisów opracowywany jest z "
+"autopsji w dwóch etapach — przepisywany przez katalogerów ze spisu treści "
+"według ustalonego standardu, a następnie sprawdzany przez bibliotekarzy. "
+"Wszystkie opisy można eksportować w różnych formatach.</p>\n"
+"                </div>\n"
+"              </div>"
+msgstr ""
+"<p class=\"line\">\n"
+"                \tBazHum – a bibliographic database of journals  from "
+"humanities and humanistic social studies BazHum is a bibliographic database "
+"of Polish academic journals from humanities and humanistic social studies. "
+"The database collects bibliographic metadata: it registers the whole content "
+"of journals – from the first to the current issue. The collection was "
+"created by Polish History Museum in Warsaw.              </p>\n"
+"              <p class=\"\">\n"
+"                Ministry of Science and Higher Education, in an announcement "
+"from May 29th 2013, placed BazHum database on the list of reference "
+"databases used for assessment and evaluation of journals. Presence of an "
+"academic journal in a reference database is one of the key guidelines taken "
+"into consideration in assigning points to journals.              </p>\n"
+"              <br>\n"
+"              <div class=\"wrap\">\n"
+"                <div class=\"two_column\">\n"
+"                  <h2 class=\"line\">Goals</h2>\n"
+"                  <p class=small>\n"
+"                  BazHum is a tool supporting scientific research and "
+"education. Putting a full bibliography of journals in the database results "
+"in much easier acquisition, ordering, aggregation and transfer of valuable "
+"information. All those activities demand less time and provide more precise "
+"results. </p>\n"
+"                </div>\n"
+"                <div class=\"two_column\">\n"
+"                  <h2 class=\"line\">Standards</h2>\n"
+"                  <p class=small>Bibliographic description of each separate "
+"article are created in MARC 21 format. Each description is created from "
+"personal observation, in two stages – copied by cataloguers from the "
+"journal’s contents in accordance with an established standard, and then "
+"checked by librarians. All descriptions can be exported in various formats. "
+"</p>\n"
+"                </div>\n"
+"              </div>"
+
+#: templates/bib/about.html:29
+msgid "Pobierz materiały"
+msgstr "Download"
+
+#: templates/bib/about.html:31
+msgid "Logo BazHum"
+msgstr "Logo"
+
+#: templates/bib/about.html:32
+msgid "Plakat"
+msgstr "Poster"
+
+#: templates/bib/about.html:38
+msgid "Oprogramowanie dostępne na licencji GNU General Public License"
+msgstr "Software licensed under GNU General Public License "
+
+#: templates/bib/about.html:39
+msgid "Baza dostępna na Open Data Commons Open Database License (ODbL)"
+msgstr ""
+"Database licensed under Open Data Commons Open Database License (ODbL) "
+
+#: templates/bib/advanced_search.html:15
+msgid "Wyszukiwanie</br>zaawansowane"
+msgstr "Advanced search"
+
+#: templates/bib/advanced_search.html:20
+msgid "Znajdź rekordy spełniające"
+msgstr "Find records matching"
+
+#: templates/bib/advanced_search.html:23
+msgid "którekolwiek"
+msgstr "any criteria"
+
+#: templates/bib/advanced_search.html:24
+msgid "wszystkie"
+msgstr "all criteria"
+
+#: templates/bib/advanced_search.html:26
+msgid "warunki"
+msgstr "conditions"
+
+#: templates/bib/advanced_search.html:35 templates/bib/advanced_search.html:58
+#: templates/bib/advanced_search.html:85
+msgid "Dowolne pole"
+msgstr "Any field"
+
+#: templates/bib/advanced_search.html:36 templates/bib/advanced_search.html:59
+#: templates/bib/advanced_search.html:86
+msgid "Tytuł"
+msgstr "Title"
+
+#: templates/bib/advanced_search.html:37 templates/bib/advanced_search.html:60
+#: templates/bib/advanced_search.html:87
+msgid "Autor"
+msgstr "Author"
+
+#: templates/bib/advanced_search.html:38 templates/bib/advanced_search.html:61
+#: templates/bib/advanced_search.html:88
+msgid "Tytuł czasopisma"
+msgstr "Journal title"
+
+#: templates/bib/advanced_search.html:39 templates/bib/advanced_search.html:62
+#: templates/bib/advanced_search.html:89
+msgid "Data wydania"
+msgstr "Date of publication"
+
+#: templates/bib/advanced_search.html:40 templates/bib/advanced_search.html:63
+#: templates/bib/advanced_search.html:90
+msgid "Język"
+msgstr "Language"
+
+#: templates/bib/advanced_search.html:125
+msgid ""
+"\n"
+"            <h2>Jak szukać?</h2>\n"
+"            <div class=\"small\">\n"
+"            <p>Oddziel słowa spacją, aby wyszukać rekordy ze wszystkimi "
+"słowami: <br>\n"
+"            <span class=\"mono\">historia średniowiecze</span></p>\n"
+"    \n"
+"            <p>Wpisz wyrażenie w cudzysłowach, aby wyszukać rekordy "
+"zawierające daną frazę: <br>\n"
+"            <span class=\"mono\">“rocznik historyczny”</span></p>\n"
+"            <p>\n"
+"            Wstaw operator OR między słowa, aby wyszukać rekordy zawierające "
+"którekolwiek z nich:<br>\n"
+"            <span class=\"mono\">rocznik OR studia</span></p>\n"
+"            <p>\n"
+"            Umieść minus przed niepożądanymi słowami:<br>\n"
+"            <span class=\"mono\">-średniowiecze</span></p>\n"
+"            "
+msgstr ""
+"\n"
+"            <h2>How to search?</h2>\n"
+"            <div class=\"small\">\n"
+"            <p>Separate words with space to search for records containing "
+"all words:  <br>\n"
+"            <span class=\"mono\">history medieval</span></p>\n"
+"    \n"
+"            <p>Put a phrase in quotation marks to search for records "
+"containing the given phrase: <br>\n"
+"            <span class=\"mono\">“historical yearly”</span></p>\n"
+"            <p>\n"
+"            Put the OR operator between words to search for records "
+"containing any of the words:<br>\n"
+"            <span class=\"mono\">Yearly OR studies</span></p>\n"
+"            <p>\n"
+"            Put a minus before unwanted words:<br>\n"
+"            <span class=\"mono\">-medieval</span></p>\n"
+"            "
+
+#: templates/bib/artykul.html:27
+msgid "Tytuł recenzowanego dzieła"
+msgstr "Title of the reviewed work"
+
+#: templates/bib/czasopismo.html:19
+msgid "Artykuły"
+msgstr "Articles"
+
+#: templates/bib/czasopismo.html:20
+msgid "Lata"
+msgstr "Years"
+
+#: templates/bib/czasopismo.html:21
+msgid "Tomy"
+msgstr "Volumes"
+
+#: templates/bib/czasopismo.html:22
+msgid "Numery"
+msgstr "Numbers"
+
+#: templates/bib/czasopismo.html:56
+msgid "Tom"
+msgstr "Vol."
+
+#: templates/bib/czasopismo.html:62
+msgid "Numer"
+msgstr "No."
+
+#: templates/bib/eshelf.html:12
+msgid "<h2>E-półka<span class='regular'> – zapamiętane artykuły</span></h2>"
+msgstr "<h2>E-shelf<span class='regular'> – saved articles</span></h2>"
+
+#: templates/bib/eshelf.html:28
+msgid "do góry"
+msgstr "up"
+
+#: templates/bib/eshelf.html:79
+msgid "Usuń folder"
+msgstr "Remove folder"
+
+#: templates/bib/eshelf.html:80
+msgid "Zmień nazwę"
+msgstr "Rename folder"
+
+#: templates/bib/eshelf.html:81
+msgid "Opróżnij obecny folder"
+msgstr "Empty current folder"
+
+#: templates/bib/eshelf.html:87 templates/bib/loginbox.html:23
+msgid "E-półka"
+msgstr "E-shelf"
+
+#: templates/bib/eshelf.html:108
+msgid "Nazwa folderu"
+msgstr "Folder name"
+
+#: static/bazhum/scripts/eshelf.js:122
+msgid "Podaj nazwę nowego folderu:"
+msgstr "Enter a name for the new folder"
+
+#: static/bazhum/scripts/eshelf.js:123 static/bazhum/scripts/eshelf.js.c:158
+#: static/bazhum/scripts/eshelf.js:196
+msgid "Zatwierdź"
+msgstr "Save"
+
+#: static/bazhum/scripts/eshelf.js:154
+msgid "Musisz zaznaczyć folder do zmiany nazwy."
+msgstr "You have to select a folder"
+
+#: static/bazhum/scripts/eshelf.js:157
+msgid "Czy na pewno zmienić nazwę folderu?"
+msgstr "Are you sure you want to change folder name?"
+
+#: static/bazhum/scripts/eshelf.js:195
+msgid "Czy na pewno opróżnić folder?"
+msgstr "Are you sure you want to empty current folder?"
+
+#: static/bazhum/scripts/eshelf.js:288
+msgid "Czy na pewno chcesz usunąć folder?"
+msgstr "Are you sure you want to remove folder?"
+
+#: static/bazhum/scripts/eshelf.js:289
+msgid "Tak"
+msgstr "Yes"
+
+#: static/bazhum/scripts/eshelf.js:289
+msgid "Nie"
+msgstr "No"
+
+#: templates/bib/eshelf_link.html:3 templates/bib/eshelf_link.html.py:8
+#: templates/bib/eshelf_link.html:11
+msgid "lub"
+msgstr "or"
+
+#: templates/bib/eshelf_link.html:9
+msgid "Usuń z e-półki"
+msgstr "Remove from E-shelf"
+
+#: templates/bib/eshelf_link.html:12
+msgid "Dodaj do e-półki"
+msgstr "Add to E-shelf"
+
+#: templates/bib/export.html:10
+msgid "Zaznaczone"
+msgstr "Checked"
+
+#: templates/bib/export.html:22
+msgid "Eksportuj"
+msgstr "Export"
+
+#: templates/bib/footer.html:15
+msgid "Muzeum Historii"
+msgstr "Polish History"
+
+#: templates/bib/footer.html:16
+msgid "Polski w Warszawie"
+msgstr "Museum in Warsaw"
+
+#: templates/bib/footer.html:21
+msgid "O projekcie"
+msgstr "About the project"
+
+#: templates/bib/footer.html:24
+msgid "Oferta dla wydawców"
+msgstr "Offer for publishers"
+
+#: templates/bib/footer.html:30
+msgid "Materiały zamieszczone na stronie są dostępna na licencji"
+msgstr "Materials published on the website under licence"
+
+#: templates/bib/footer.html:31
+msgid "Projekt graficzny serwisu:"
+msgstr "Designed by:"
+
+#: templates/bib/footer.html:42 templates/bib/footer.html.py:89
+#: templates/bib/loginbox.html:21
+msgid "Załóż konto"
+msgstr "Register"
+
+#: templates/bib/footer.html:49
+msgid "Nazwa"
+msgstr "Username"
+
+#: templates/bib/footer.html:59
+msgid "Adres e-mail"
+msgstr "E-mail"
+
+#: templates/bib/footer.html:69 templates/bib/footer.html.py:122
+msgid "Hasło"
+msgstr "Password"
+
+#: templates/bib/footer.html:78
+msgid "Powtórz hasło"
+msgstr "Confirm password"
+
+#: templates/bib/footer.html:94
+msgid "Logowanie"
+msgstr "Sign in"
+
+#: templates/bib/footer.html:106 templates/bib/loginbox.html:20
+msgid "Zaloguj się"
+msgstr "Sign in"
+
+#: templates/bib/footer.html:113
+msgid "Login"
+msgstr "Username"
+
+#: templates/bib/footer.html:133
+msgid "Zaloguj"
+msgstr "Sign in"
+
+#: templates/bib/footer.html:138
+msgid "Zapomniałem hasła"
+msgstr "Forgot password"
+
+#: templates/bib/header.html:81 templates/bib/main_page.html:48
+msgid "Szukaj"
+msgstr "Search"
+
+#: templates/bib/header.html:86 templates/bib/main_page.html:53
+#: templates/bib/main_page.html.py:72
+msgid "Wyszukiwanie zaawansowane"
+msgstr "Advanced search"
+
+#: templates/bib/header.html:89 templates/bib/main_page.html:56
+#: templates/bib/main_page.html.py:75
+msgid "Lista czasopism"
+msgstr "List of journals"
+
+#: templates/bib/loginbox.html:24
+msgid "Wyloguj"
+msgstr "Logout"
+
+#: templates/bib/logout.html:4
+msgid "Zostałeś pomyślnie wylogowany."
+msgstr "You have successfully logged out"
+
+#: templates/bib/passwordReset.html:6
+msgid "Zmiana hasła"
+msgstr "Change your password"
+
+#: templates/bib/passwordReset.html:13
+msgid "Adres email"
+msgstr "E-mail"
+
+#: templates/bib/passwordReset.html:17
+msgid "Nowe hasło"
+msgstr "New password"
+
+#: templates/bib/passwordReset.html:21
+msgid "Powtórz nowe hasło"
+msgstr "Confirm new password"
+
+#: templates/bib/passwordReset.html:27
+msgid "Zmień hasło"
+msgstr "Change your password"
+
+#: templates/bib/social.html:4
+msgid "Podziel się"
+msgstr "Share"
+
+#: templates/bib/successActivation.html:4
+msgid ""
+"<h1 class=\"regular\">Twoje konto <br>\n"
+"zostało aktywowane.</h1>\n"
+"              <p class=\"data_block\">Możesz teraz korzystać z funkcji dla "
+"zalogowanych użytkowników.\n"
+"              <br><br><br>"
+msgstr ""
+"<h1 class=\"regular\">Your account <br>\n"
+"has been activated.</h1>\n"
+"              <p class=\"data_block\">You may now use features available for "
+"logged-in users.\n"
+"              <br><br><br>"

@@ -1,0 +1,132 @@
+{% include templ.header %}
+{% load i18n %}
+<div id="content_conteiner" class="wrap">
+<div class="part_width">
+          <div class="wrap">
+ 
+          <div id="epolka_header">
+            <div class="button_wrap">
+
+            </div>
+            <div class="header_wrap">
+              {% blocktrans %}<h2>E-półka<span class='regular'> – zapamiętane artykuły</span></h2>{% endblocktrans %}
+            </div>
+          </div>
+          
+          <div class="clear"></div>
+
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                    <div class="wrap"> 
+                    <div class="margin_check">
+                      <input type="checkbox" name="checkboxMain" id="checkboxMain" value="value" />
+                    </div> 
+                    {% include templ.export %}
+
+                    <p class="go_top"><a href="#" title="">{% trans 'do góry' %}</a></p>
+                    </div>
+                     <hr>
+                </div>
+              </div>
+            </div>
+          </div> 
+
+          <ul class="table_content full_width">
+      	  	{% include templ.recordset %}
+          </ul>
+
+          <div class="clear"></div>
+
+          <div class="pagination">
+            <div class="border">
+              <hr>
+            </div>
+               <div class="margin_check hide_on_1000">
+                    &nbsp;
+                </div>   
+            <ul class="horisontal_big links_box">
+              <li class="previous {% if not page.has_previous %}disabled {% endif %}arrow"><a href="{% if page.has_previous %}{% url 'bib.views.e_shelf' activeDir page.previous_page_number %}{% endif %}" title="">&larr;</a></li>
+              {% if pageList.0.has_previous %}
+              <li><a href="{% url 'bib.views.e_shelf' activeDir 1 %}" title="">1</a></li>
+              <li>&hellip;</li>
+              {% endif %}
+              
+              {% for lp in pageList %}
+              <li  {% if pageNo = lp.number %} class="active"{% endif %}><a href="{% url 'bib.views.e_shelf' activeDir lp.number %}" title="">{{ lp.number }}</a></li>
+              {% endfor %}
+              
+              {% if pageList.6.has_next %}
+              <li>&hellip;</li>
+              <li><a href="{% url 'bib.views.e_shelf' activeDir pgn.num_pages %}" title="">{{ pgn.num_pages }}</a></li>
+              {% endif %}
+               <li class="previous {% if not page.has_next %}disabled {% endif %}arrow"><a href="{% if page.has_next %}{% url 'bib.views.e_shelf' activeDir page.next_page_number %}{% endif %}" title="">&rarr;</a></li>
+            </ul>
+            <div class="clear"></div>
+          </div>
+          
+        </div>
+          
+
+          </div>
+
+          <div id="sidebar" class="epolka_menu">
+            <div class="administration_icons">
+              <div class="adminicon edit_folder">
+                <span></span>
+                <div class="edit_menu">
+                  <a id="del_folder" title="">{% trans 'Usuń folder' %}</a>
+                  <a id="rename_folder" title="">{% trans 'Zmień nazwę' %}</a>
+                  <a id="empty_folder" title="">{% trans 'Opróżnij obecny folder' %}</a>
+                </div>
+              </div>
+              <div class="adminicon add_new"><span></span></div>
+            </div>
+            <ul class="folders">
+              <li class="rootFolder"><a {% if activeDir|add:0 = 0 %}class="active"{% endif %} href="{% url 'bib.views.e_shelf' %}" title="">{% trans 'E-półka' %} {% if rootCnt %}({{ rootCnt }}){% endif %}</a>
+                <ul id="folders">
+            	{% for folder in folders %}
+            		<li {% if folder.id = activeDir|add:0 %}class="active"{% endif %} id="{{ folder.id }}"><a href="{% url 'bib.views.e_shelf' folder.id pageNo %}">{{ folder.name }} {% if folder.getArticleCount != 0 %}({{ folder.getArticleCount }}){% endif %}</a></li>
+            	{% endfor %}
+                </ul>
+              </li>
+            </ul>
+
+
+          </div>
+          
+  <div class="popup eshelf_popup">
+    <div class="popup_window">
+      <h2>{% trans 'Czy na pewno chcesz usunąć folder?' %}</h2>
+      <hr>
+
+      <div class="popup_content">
+
+        <div class="form_row">
+          <div class="label_col">
+            {% trans 'Nazwa folderu' %}: 
+          </div>
+          <div class="input_col">
+            <input id="folderData" type="text" name="" value="">   
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons_conteiner">
+        <div class="buttons_wrap">
+          <input type="submit" name="" value="Tak">             
+          <input class="secondary_button" type="submit" name="" value="Nie">
+        </div>
+      </div>
+      <div class="popup_closer"></div>
+    </div>
+    <div class="popup_overlay"></div>
+  </div>
+  
+  <div style="visibility: hidden" >
+  	<p id="hdCreateFolder">{% trans 'Podaj nazwę nowego folderu:' %}</p>
+  	
+  </div>
+{% include templ.footer %}

@@ -1,0 +1,15 @@
+{% load i18n %}
+{% if user.is_authenticated and request.path = '/bib/list/publisher/' %}
+&nbsp;&nbsp;{% trans 'lub' %}&nbsp;&nbsp;
+<input type="submit" name="eshelf_add" value="Dodaj do schowka">
+{% elif user.is_authenticated %}
+	{% with request.path|slice:":13" as short_url %}
+	{% if short_url = '/bib/e_shelf/' %}
+		&nbsp;&nbsp;{% trans 'lub' %}&nbsp;&nbsp;
+		<input type="submit" name="eshelf_del" id="eshelf_del" value="{% trans 'Usuń z e-półki' %}">
+	{% else %}
+		&nbsp;&nbsp;{% trans 'lub' %}&nbsp;&nbsp;
+		<input type="submit" name="eshelf_add" id="eshelf_add" value="{% trans 'Dodaj do e-półki' %}">
+	{% endif %}
+	{% endwith %}
+{% endif %}                      

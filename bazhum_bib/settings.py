@@ -2,7 +2,10 @@
 # Django settings for bazhum_bib project.
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = False
+# TEMPLATE_DEBUG = DEBUG
+
+# import memcache_toolbar.panels.memcache
 
 ADMINS = (
     ('Artur Szymański', 'artur.szymanski@hist.pl'),
@@ -16,7 +19,7 @@ DATABASES = {
         'NAME': 'bazhum_bib',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'bazhum_bib',
-        'PASSWORD': 'password',
+        'PASSWORD': 'bazhum_bib',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -24,7 +27,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['bazhum.pl', 'www.bazhum.pl']
+ALLOWED_HOSTS = ['localhost:8000']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -34,7 +37,16 @@ TIME_ZONE = 'Europe/Warsaw'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-en'
+LANGUAGE_CODE = 'pl'
+
+LANGUAGES = (
+    ('pl', 'Polski'),
+    ('en', 'English'),
+)
+
+LOCALE_PATHS = (
+    '/bazhum_bib/bib/locale',
+)
 
 SITE_ID = 1
 
@@ -62,7 +74,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/srv/www/python/django-1.5-env/www/bazhum_bib/static'
+STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -84,7 +96,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'dq_mj!7e5&%qjb+l@0cm6rjm0ocaapp+i-zt@!fe4d2+c1afof'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -93,13 +105,29 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    )
+
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',    
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'minidetector.Middleware',
+    'django.middleware.transaction.TransactionMiddleware',
+    'reversion.middleware.RevisionMiddleware',    
+    #'bib.profile_middleware.ProfileMiddleware',
+    #'bib.profile_middleware.memoryMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -115,7 +143,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     #'C:/prv/devel/bazhum_bib/templates',
     #'/cygdrive/c/prv/devel/bazhum_bib/templates',
-    # '/srv/www/python/django-1.5-env/www/bazhum_bib/templates/',
+#     '/srv/www/python/django-1.5.2-env/www/bazhum_bib/bib/templates/',
 )
 
 INSTALLED_APPS = (
@@ -131,9 +159,13 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 	'bib',
     'reversion',
-    'django.contrib.flatpages',
-    'django_oaipmh',
+#     'django.contrib.flatpages',
+#     'django_oaipmh',
     'debug_toolbar',
+    'registration',
+#     'modeltranslation',
+     #'memcache_toolbar',
+#     'template_timings_panel',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -167,3 +199,25 @@ LOGGING = {
 
 ADMIN_MEDIA_PREFIX = ''
 INTERNAL_IPS = ('127.0.0.1',)
+ACCOUNT_ACTIVATION_DAYS = 7
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = ''
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+
+# DEBUG_TOOLBAR_PANELS = (
+#     'debug_toolbar.panels.version.VersionDebugPanel',
+#     'debug_toolbar.panels.timer.TimerDebugPanel',
+#     'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+#     'debug_toolbar.panels.headers.HeaderDebugPanel',
+#     'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+#     'debug_toolbar.panels.template.TemplateDebugPanel',
+#     'debug_toolbar.panels.sql.SQLDebugPanel',
+#     'debug_toolbar.panels.signals.SignalDebugPanel',
+#     'debug_toolbar.panels.logger.LoggingPanel',
+#     #'memcache_toolbar.panels.memcache.MemcachePanel',
+#     'template_timings_panel.panels.TemplateTimings.TemplateTimings',
+# )

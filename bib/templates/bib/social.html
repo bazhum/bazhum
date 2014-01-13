@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="share">
+  <p class="line">
+    {% trans 'Podziel się' %}:&nbsp;&nbsp;
+    <a class="icon email" href="mailto:?subject=Znalezione w bazie BazHum&body=Interesujący artykuł: {{ socialShare }} %0A{{ request.build_absolute_uri }}" title=""></a>
+	<a id="facebookbtn-link" class="icon facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" onclick="javascript:window.open(this.href,
+  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+    <a href="http://twitter.com/share?text=Interesujący artykuł: {{ socialShare|iriencode }}" target="_blank" class="icon twitter " onclick="javascript:window.open(this.href,
+  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+    <a id="googleplus_link" class="icon google_plus" href="https://plus.google.com/share?url={{ request.build_absolute_uri }}" onclick="javascript:window.open(this.href,
+  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" title=""></a>
+  </p>
+</div> 

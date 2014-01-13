@@ -1,0 +1,31 @@
+{% for article in qs %}
+            <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  <input class="check" type="checkbox" name="checkbox" value="{{ article.pk }}" />
+                </div>   
+                <div class="links_box">
+                  <h2><a href="{% url 'bib.views.showArticle' article.pk %}" title="">{{ article.getNameClean }}</a></h2>
+                  <p>
+                  {% for author in article.getAuthors %}
+                  <a href="" title="">{{ author.customTitleFiled }}</a>{% if not forloop.last %},{% endif %}
+                  {% if forloop.last %}<br/>{% endif %}
+                  {% endfor %}
+                    {% if article.idjrl_id %}
+                    <a href="{% url 'bib.views.showJournal' article.idjrl_id %}" title="">{{ article.journal }}</a>
+                    {% endif %}
+                    {% if article.idvol_id %}
+                    {% if article.volume and article.number%}, {% endif %}<a href="{% url 'bib.views.showVolume' article.idvol_id %}" title="">{{ article.volume }}</a>
+                    {% endif %}
+                    {% if article.idno_id %}
+                        /<a href="{% url 'bib.views.showNumber' article.idno_id %}" title="">{{ article.number }}</a> 
+                    {% endif %}
+                    {% if article.idyear_id %}
+                    (<a href="{% if article.idvol_id %}{% url 'bib.views.showVolume' article.idvol_id %}{% endif %}" title="">{{ article.year }}</a>)  
+                    {% endif %}
+                    {{ article.getPagesString }}
+                     </p>                                   
+                </div>
+              </div>
+            </li>
+		  {% endfor %}

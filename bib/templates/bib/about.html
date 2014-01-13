@@ -1,0 +1,45 @@
+{% include templ.header %}
+{% load i18n %}
+      <div id="content_conteiner" class="wrap">
+          <div class="meta_column">
+              {% blocktrans %}<h1><span class="regular">Baza bibliograficzna <span class="nowrap_wide">czasopism humanistycznych</span> 
+i&nbsp;społecznych</span>&nbsp;BazHum</h1>{% endblocktrans %}
+              <br>
+              {% blocktrans %}<p class="line">
+                BazHum to baza bibliograficzna polskich naukowych czasopism humanistycznych i&nbsp;społecznych. Baza gromadzi metadane bibliograficzne: rejestruje całą zawartość czasopism — od pierwszych numerów do bieżących. Twórcą kolekcji jest Muzeum Historii Polski w Warszawie.
+              </p>
+              <p class="">
+                Ministerstwo Nauki i Szkolnictwa Wyższego w swoim komunikacie z dnia 29 maja 2013 r. w sprawie kryteriów i trybu oceny czasopism naukowych umieściło bazę BazHum na liście baz referencyjnych uwzględnianych przy ocenianiu i ewaluacji czasopism. 
+Obecność czasopisma naukowego w bazie referencyjnej jest jedną z kluczowych wytycznych branych pod uwagę przy punktowaniu czasopism.
+              </p>
+              <br>
+              <div class="wrap">
+                <div class="two_column">
+                  <h2 class="line">Cele</h2>
+                  <p class=small>
+                  BazHum jest narzędziem wspierającym badania naukowe i edukację. Dzięki umieszczaniu pełnej bibliografii czasopism w bazie znacznie prostsze jest pozyskiwanie, porządkowanie, agregowanie i przekazywanie wartościowych informacji. Czynności te wymagają mniej czasu i zapewniają bardziej precyzyjne wyniki. </p>
+                </div>
+                <div class="two_column">
+                  <h2 class="line">Standardy</h2>
+                  <p class=small>Opisy bibliograficzne dla każdego artykułu z osobna tworzone są w formacie MARC 21. Każdy z opisów opracowywany jest z autopsji w dwóch etapach — przepisywany przez katalogerów ze spisu treści według ustalonego standardu, a następnie sprawdzany przez bibliotekarzy. Wszystkie opisy można eksportować w różnych formatach.</p>
+                </div>
+              </div>{% endblocktrans %}
+              <div class="download_box">
+                <hr>
+                <h3>{% trans 'Pobierz materiały' %}:</h3>
+                <ul class="download_list">
+                  <li><span class="icon download"></span><a href="{{ meta.download.logo }}">{% trans 'Logo BazHum' %}</a></li>
+                  <li><span class="icon download"></span><a href="{{ meta.download.poster }}">{% trans 'Plakat' %}</a></li>
+                </ul>                
+              </div>
+              <div class="copyright_box">
+                <hr>
+                <p class="small">
+                  <a target="_blank" href="http://www.gnu.org/licenses/gpl.html" title="">{% trans "Oprogramowanie dostępne na licencji GNU General Public License" %} </a> <br>
+                  <a target="_blank" href="http://opendatacommons.org/licenses/odbl/" title="">{% trans "Baza dostępna na Open Data Commons Open Database License (ODbL)" %}  </a>
+                </p>
+              </div>
+              
+          </div>
+  
+{% include templ.footer %}

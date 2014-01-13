@@ -1,0 +1,13 @@
+{% include templ.header %}
+      <div id="content_conteiner" class="wrap">
+          <div class="meta_column">
+              <h1 class="regular">{{ mesg }}</h1>
+              <br><br><br>
+              {% if form %}
+              	{{ form.errors }}
+              {% endif %}
+          </div>
+
+          <div class="clear"></div>          
+
+{% include templ.footer %}

@@ -1,0 +1,41 @@
+{% include templ.header %}
+      <div id="content_conteiner" class="wrap">
+        <br>
+<div id="panel_header">
+            <div class="button_wrap">
+               &nbsp;
+            </div>
+            <div class="header_wrap">
+              <h2>Panel bibliotekarza <br><span class="regular">– zatwierdzanie rekordów</span></h2>
+            </div>
+          </div>
+
+          <div class="clear"></div>
+<form action="" method="get">
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                  <div class="wrap"> 
+                  <div class="margin_check">
+                    <input type="checkbox" id="checkboxMain" name="checkboxMain" value="value" />
+                  </div> 
+                  <div class="links_box">
+                      <p>Zaznaczone&nbsp;&nbsp;
+                      <input type="submit" name="" value="Zatwierdź">
+                    </p>          
+                  </div>
+
+                  <p class="go_top"><a href="#" title="">do góry</a></p>
+                </div>
+                <hr>
+              </div></div>
+            </div>
+          </div> 
+
+          <ul class="table_content full_width"> 
+      		{% include templ.recordset %}
+
+          </ul>
+      </form>
+{% include templ.footer %}

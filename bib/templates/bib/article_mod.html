@@ -1,0 +1,390 @@
+{% include templ.header %}
+
+      <div id="content_conteiner" class="wrap">       
+        <div class="part_width">
+          <div class="wrap">
+            <div class="meta_column">
+            	{% if request.GET.mesg %}
+               	<h3>{{ request.GET.mesg }}</h3>
+               	{% endif %}
+              <h1 class="smaller">Dodawanie artykułu</h1>
+               <br>
+               <div id="advanced_search_conteiner">
+
+               {% if id = -1 %}
+               	  <form method="post" action="{% url 'bib.views.article_mod' %}">
+               {% else %}
+                  <form method="post" action="{% url 'bib.views.article_mod' id %}">
+               {% endif %}
+               {% csrf_token %}
+               <input type="hidden" name="backToUrl" value="{{ backToUrl }}" />
+                    <hr> 
+                    <ul id="add_article_conteiner">
+                      <span class="label">Czasopismo</span>
+                        <span style="width: 100%" class="select_wrap">
+                          <select style="width: 100%" name="jrl">
+                          {% for j in jrls %}
+                            <option {% if formData.jrl = j %}selected{% endif %} value="{{ j.id }}">{{ j }}</option>                            
+                       	  {% endfor %}
+                          </select>
+                          <div class="error_comment error jrl">
+                            </div>
+                        </span>
+                      <li class="years">
+                        <span class="one_three">
+                          Rok:&nbsp;&nbsp;<input type="text" name="year" value="{{ formData.year }}" placeholder="">
+                          <div class="error_comment error year">
+                              {{ errData.year }}
+                            </div>
+                        </span>
+                        <span class="one_three">
+                          Tom:&nbsp;&nbsp;<input type="text" name="volume" value="{{ formData.vol }}" placeholder="">
+                          <div class="error_comment error volume">
+                              {{ errData.vol_no }}
+                              {{ errData.vol }}
+                            </div>
+                        </span>
+                        <span class="one_three">
+                          Nr:&nbsp;&nbsp;<input type="text" name="number" value="{{ formData.no }}" placeholder="">
+                          <div class="error_comment error number">
+                              {{ errData.no }}
+                            </div>
+                        </span>
+                      </li>
+                      <hr>
+                      {% if not formData.titles %}
+                      <li class="title">    
+                      	<input type="hidden" name="titles-counter" value="" />                  
+                        <span class="label">Tytuł:</span>
+
+                        <span class="input_text_wrap">
+                          <input type="text" name="title-0" value="">
+                          <div class="error_comment error title-0">
+                              {{ errData.titles_no }}
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap">
+                              <select name="lang-0">
+                              {% for l in langs %}
+                                  <option {% if l.key = 'PL' %}selected{% endif %} value="{{ l.key }}">{{ l.lang }}</option>
+                              {% endfor %}
+                                </select>
+                            </span>
+                          </span>
+                        </span>                      
+                      </li>
+                      <li class="title">
+                      	<input type="hidden" name="titles-counter" value="" />
+                        <span class="label">Tytuł dzieła recenzowanego:</span>
+
+                        <span class="input_text_wrap">
+                          <input type="text" name="title-1" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            <a href="#" class="minus button" title="">-</a>
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap" style="display: none">
+                              <select name="lang-1">
+                              {% for l in langs %}
+                                  <option {% if l.key = 'PL' %}selected{% endif %} value="{{ l.key }}">{{ l.lang }}</option>
+                              {% endfor %}
+                                </select>
+                            </span>
+                          </span>
+                        </span>
+
+                      </li>
+                      {% else %}
+                      	{% for title in formData.titles %}
+                        <li class="title">
+                    	<input type="hidden" name="titles-counter" value="" />
+                    	<input type="hidden" name="title-id-{{ forloop.counter0 }}" value="{{ title.id }}" />
+                    	<input type="hidden" name="title-par_id-{{ forloop.counter0 }}" value="{{ title.par_id }}" />                      
+                        <span class="label">{% if forloop.first %}Tytuł:{% else %}Tytuł dzieła recenzowanego:{% endif %}</span>
+
+                        <span class="input_text_wrap">
+                          <input type="text" name="title-{{ forloop.counter0 }}" value="{{ title.name_clean }}">
+                          <div class="error_comment error">
+                              {{ errData.titles_no }}
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            {% if not forloop.first %}<a href="#" class="minus button" title="">-</a>{% endif %}
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap">
+                              <select name="lang-{{ forloop.counter0 }}">
+                              {% for l in langs %}
+                                  <option {% if l.key = title.lang %}selected{% endif %} value="{{ l.key }}">{{ l.lang }}</option>
+                              {% endfor %}
+                                </select>
+                            </span>
+                          </span>
+                        </span>                      
+                      </li>
+                      	{% endfor %}
+                      	{% for title in formData.reviews %}
+                        <li class="title">
+                    	<input type="hidden" name="titles-counter" value="" />
+                    	<input type="hidden" name="title-id-{{ forloop.counter0|add:1 }}" value="{{ title.id }}" />
+                    	<input type="hidden" name="title-par_id-{{ forloop.counter0|add:1 }}" value="{{ title.par_id }}" />                      
+                        <span class="label">Tytuł dzieła recenzowanego:</span>
+
+                        <span class="input_text_wrap">
+                          <input type="text" name="title-{{ forloop.counter0|add:1 }}" value="{{ title.author }}, {{ title.title }}, {{ title.place }}, {{ title.year }}">
+                          <div class="error_comment error">
+                              {{ errData.titles_no }}
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            <a href="#" class="minus button" title="">-</a>
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap" style="display: none">
+                              <select name="lang-{{ forloop.counter0|add:1 }}">
+                              {% for l in langs %}
+                                  <option {% if l.key = title.lang %}selected{% endif %} value="{{ l.key }}">{{ l.lang }}</option>
+                              {% endfor %}
+                                </select>
+                            </span>
+                          </span>
+                        </span>                      
+                      </li>
+                      	{% endfor %}
+                      {% endif %}
+
+                      <p class="line">Twórcy:</p>
+					  {% if not formData.authors %}
+                      <li class="author">
+                      	<input type="hidden" name="auth-counter" value="" />
+                        <span class="input_text_wrap">
+                          <span>Imię:</span>
+                          <input type="text" name="fname-0" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="input_text_wrap">
+                          <span>Nazwisko:</span>
+                          <input type="text" name="lname-0" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap">
+                              <select name="AuthorType-0">
+                                  <option selected value="author">autor</option>
+                                  <option value="translator">tłumacz</option>
+                                  <option value="reviewed_work_author">autor recenzowanego dzieła</option>
+                                </select>
+                            </span>
+                          </span>
+                        </span>
+                      </li>
+                      <li class="author">
+                      	<input type="hidden" name="auth-counter" value="" />
+                        <span class="input_text_wrap">
+                          <span>Imię:</span>
+                          <input type="text" name="fname-1" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="input_text_wrap">
+                          <span>Nazwisko:</span>
+                          <input type="text" name="lname-1" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            <a href="#" class="minus button" title="">-</a>
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap">
+                              <select name="AuthorType-1">
+                                  <option selected value="author">autor</option>
+                                  <option value="translator">tłumacz</option>
+                                  <option value="reviewed_work_author">autor recenzowanego dzieła</option>
+                                </select>
+                            </span>
+                          </span>
+                        </span>
+                      </li>
+                	  {% else %}
+                	  	{% for auth in formData.authors %}
+        	  		  <li class="author">
+        	  		  	<input type="hidden" name="auth-counter" value="" />
+        	  		  	<input type="hidden" name="auth-id-{{ forloop.counter0 }}" value="{{ auth.id }}" />
+                    	<input type="hidden" name="auth-par_id-{{ forloop.counter0 }}" value="{{ auth.par_id }}" />
+                        <span class="input_text_wrap">
+                          <span>Imię:</span>
+                          <input type="text" name="fname-{{ forloop.counter0 }}" value="{{ auth.firstname }}">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="input_text_wrap">
+                          <span>Nazwisko:</span>
+                          <input type="text" name="lname-{{ forloop.counter0 }}" value="{{ auth.surname }}">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            {% if not forloop.first %}
+                            <a href="#" class="minus button" title="">-</a>
+                            {% endif %}
+                          </span>
+                          <span class="input_wrap">
+                            <span class="select_wrap">
+                              <select name="AuthorType-{{ forloop.counter0 }}">                      			
+                                  <option {% if auth.role = 'author' %}selected{% endif %} value="author">autor</option>
+                                  <option {% if auth.role = 'translator' %}selected{% endif %} value="translator">tłumacz</option>
+                                  <option {% if auth.role = 'reviewed_work_author' %}selected{% endif %} value="reviewed_work_author">autor recenzowanego dzieła</option>
+                                </select>
+                            </span>
+                          </span>
+                        </span>
+                      </li>
+                	  	{% endfor %} 
+                	  {% endif %}
+                      <p class="line">Zakres stron:</p>
+					  {% if not formData.pages %}
+                      <li class="author">             
+                      	<input type="hidden" name="pages-counter" value="" />         	
+                        <span class="input_text_wrap">
+                          <span>Od:</span>
+                          <input type="text" name="pFrom-0" value="">
+                          <div class="error_comment error">
+                              {{ errData.pages.0.items.0.1.0 }}
+                            </div>
+                        </span>
+
+                        <span class="input_text_wrap">
+                          <span>Do:</span>
+                          <input type="text" name="pTo-0" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+                       <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                          </span>
+                        </span>
+                      </li>
+                      <li class="author">
+                      	<input type="hidden" name="pages-counter" value="" />
+                        <span class="input_text_wrap">
+                          <span>Od:</span>
+                          <input type="text" name="pFrom-1" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+
+                        <span class="input_text_wrap">
+                          <span>Do:</span>
+                          <input type="text" name="pTo-1" value="">
+                          <div class="error_comment error">
+                              
+                            </div>
+                        </span>
+                       <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            <a href="#" class="minus button" title="">-</a>
+                          </span>
+                        </span>
+                      </li>
+                    {% else %}
+                    	{% for p in formData.pages %}
+            		  <li class="author">
+            		  	<input type="hidden" name="pages-counter" value="" />
+            		  	<input type="hidden" name="page-id-{{ forloop.counter0 }}" value="{{ p.id }}" />
+                    	<input type="hidden" name="page-par_id-{{ forloop.counter0 }}" value="{{ p.par_id }}" />
+                        <span class="input_text_wrap">
+                          <span>Od:</span>
+                          <input type="text" name="pFrom-{{ forloop.counter0 }}" value="{{ p.page_from }}">
+                          <div class="error_comment error">
+                              {{ p.errors.pFrom }}
+                            </div>
+                        </span>
+
+                        <span class="input_text_wrap">
+                          <span>Do:</span>
+                          <input type="text" name="pTo-{{ forloop.counter0 }}" value="{{ p.page_to }}">
+                          <div class="error_comment error">
+                              {{ p.errors.pTo }}
+                            </div>
+                        </span>
+                       <span class="search_column">
+                          <span class="plus_minus">
+                            <a href="#" class="plus button" title="">+</a>
+                            {% if not forloop.first %}
+                            <a href="#" class="minus button" title="">-</a>
+                            {% endif %}
+                          </span>
+                        </span>
+                      </li>
+                    	{% endfor %}
+                    {% endif %}
+                      
+                    </ul>                    
+                 
+                    <p class="line right_button add_article_submit">
+                      <input class="big_button secondary_button" type="submit" name="add_next" value="Zapisz i dodaj następny">
+                      <input class="big_button" type="submit" name="save" value="Zapisz">
+                    </p>
+
+                  </form>
+                </div> 
+              
+          </div>
+              </div>
+
+        </div>
+
+        <div id="sidebar" class="filter">
+
+
+          </div>
+
+
+      
+{% include templ.footer %}

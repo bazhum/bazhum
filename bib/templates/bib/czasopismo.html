@@ -1,0 +1,81 @@
+{% include templ.header %}
+{% load i18n %}
+      <div id="content_conteiner" class="wrap">
+      	{% if user.is_authenticated and jrl.id in jrlPerms %}
+      	<div class="button_wrap side_button">
+      		<form method="get" action="{% url 'bib.views.article_mod' %}">
+      		   <input type="hidden" name="jrl" value="{{ jrl.id }}">
+               <input type="submit" name="" value="Dodaj artykuł">
+           </form>
+        </div>
+        {% endif %}
+          <div class="meta_column {% if user.is_authenticated and jrl.id in jrlPerms %}side_button{% endif %}">
+              <h1>{{ jrl }}</h1>
+              <p class="data_block">
+              
+              <a href="{% url 'bib.views.listPub' jrl.getContributorId %}">{{ jrl.getContributor }}</a> <br>
+              {% if jrl.issn %}ISSN {{ jrl.issn|default:"" }}{% endif %}
+              {% if stats %}
+              	<br/><strong>{% trans 'Artykuły' %}: {{ stats }}</strong>
+              	<br/><strong>{% trans 'Lata' %}: {{ statsYrs }}</strong>
+              	<br/><strong>{% trans 'Tomy' %}: {{ statsVols }}</strong>
+              	<br/><strong>{% trans 'Numery' %}: {{ statsNos }}</strong>
+              {% endif %}</p>
+              <div class="wrap">
+                {% include templ.social %}
+              </div>
+          </div>
+
+          <div class="clear"></div>
+
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                  <div class="wrap"> 
+                  <div class="margin_check">
+                    <input type="checkbox" name="checkboxMain" id="checkboxMain" value="value" />
+                  </div> 
+                  {% include templ.export %}
+
+                  <p class="go_top"><a href="#" title="">{% trans 'do góry' %}</a></p>
+                </div>
+                <hr>
+              </div></div>
+            </div>
+          </div> 
+          <ul class="table_content full_width">
+          {% for r in records %}
+            <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  <input class="check" type="checkbox" name="checkbox" value="{% if r.2 %}{{ r.2 }}{% else %}y{{ r.0 }}{% endif %}" />
+                </div>   
+                <div class="links_box tom">
+                  <h2>{% if r.2 %}<a href="{% url 'bib.views.showVolume' r.2 %}" class="tom_link" title=""><span class="nowrap">{% trans 'Tom' %} {{ r.3 }}</span></a>{% endif %}&nbsp;&nbsp;<span class="regular nowrap">{{ r.1 }}</span></h2>          
+                </div>
+                  <div class="links_box numer">
+                  {% for n in r.4 %}
+                  {% if n.0 %}
+                  {% if forloop.first %}
+                  <p class="label">{% trans 'Numer' %}:</p>
+                  <span class="horisontal_big">
+                  {% endif %}
+                    <a href="{% url 'bib.views.showNumber' n.0|default_if_none:'0' %}" title="">{{ n.1|default_if_none:'' }}</a>                  
+                  {% if forloop.last %}
+                  </span>    
+                  {% endif %}
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </li>{% endfor %}
+            
+            
+            
+            
+            
+            
+                     
+          </ul>
+{% include templ.footer %}

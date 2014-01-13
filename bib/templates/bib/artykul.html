@@ -1,0 +1,80 @@
+{% include templ.header %}
+{% load i18n %}
+      <div id="content_conteiner" class="wrap">
+      {% if user.is_authenticated and jrl.id in jrlPerms %}
+      	<div class="button_wrap side_button">
+      		<form method="get" action="{% url 'bib.views.article_mod' article.id %}">
+               <input type="submit" name="" value="Modyfikuj artykuł">               
+           </form>
+               <input style="background-color: red" type="submit" name="del_art" value="Usuń artykuł" onclick="$('.eshelf_popup').show()">               
+        </div>
+      {% endif %}
+          <div class="meta_column {% if user.is_authenticated and jrl.id in jrlPerms %}side_button{% endif %}">
+              <h1>{{ article.getName }}</h1>
+              <p class="data_block"><span><a href="{% url 'bib.views.showJournal' jrl.id %}">{{ jrl }}</a> 
+              {%spaceless%}{% if volume %}<a href="{% url 'bib.views.showVolume' volume.id %}">{{ volume.getName }}</a>{% endif %}{% if volume and number %}/{%endif%}{% if number %}<a href="{% url 'bib.views.showNumber' number.id %}">{{ number.getName }}</a>{% endif %}{%endspaceless%}
+              {% if year %}({{ year.getName }}){% endif %}
+              s. {% for p in pages %}
+              {{ p.page_from }} 
+              {% if p.page_to %}-{%endif%}
+              {{ p.page_to }}
+              {% if not forloop.last %}, {% endif %}
+              {% endfor %}</span> <br>              
+              {% for a in article.getAuthors %}
+              <a href="{% url 'bib.views.searchResults' %}?fa={{a.title }}">{{ a.customTitleFiled }}
+              	{% if a.role = 'reviewed_work_author' %}(aut. dzieła rec.){% elif a.role = 'translator' %}(tł.){% endif %}</a>{% if not forloop.last %}, {% endif %}
+              {% endfor %}<br/>
+              {% for r in reviews %}
+              {% if forloop.first %}
+              {% trans 'Tytuł recenzowanego dzieła' %}:</br><b>
+              {% endif %}{{ r }}{% if not forloop.last %}, {% endif %}</br>
+              {% endfor %}</b>
+              </p>
+              <div class="wrap">
+                {% include templ.social %}
+              </div>
+          </div>
+
+          <div class="clear"></div>
+
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                  <div class="wrap"> 
+                  <div class="margin_check hide_on_1000">
+                    &nbsp;
+                  </div> 
+                  {% include templ.export %}
+
+                  <p class="go_top"><a href="#" title="">do góry</a></p>
+                </div>
+           <!--      <hr> -->
+              </div></div>
+            </div>
+          </div> 
+
+  <div class="popup eshelf_popup">
+    <div class="popup_window">
+      <h2>{% trans 'Czy na pewno chcesz usunąć artykuł?' %}</h2>
+      <hr>
+
+      <div class="popup_content">
+       
+
+      </div>
+
+      <div class="buttons_conteiner">
+        <div class="buttons_wrap">
+       	  <form method="get" action="#">
+               <input style="background-color: red" type="submit" name="del_art" value="Tak">
+               <input class="secondary_button" type="submit" name="" value="Nie">               
+           </form>                                 
+        </div>
+      </div>
+      <div class="popup_closer"></div>
+    </div>
+    <div class="popup_overlay"></div>
+  </div>
+
+{% include templ.footer %}

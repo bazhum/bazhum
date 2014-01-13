@@ -1,0 +1,5 @@
+Zresetowałeś hasło za pomocą formularza w serwisie www.bazhum.pl. W celu potwierdzenia tej operacji wejdź w poniższy link:
+
+http://www.bazhum.pl{% url 'bib.views.passwordResetConfirm' userid key %}
+
+Jeżeli nie resetowałeś hasła w tym serwisie zignoruj tego maila.

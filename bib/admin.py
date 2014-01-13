@@ -10,7 +10,59 @@ from bib.forms import *
 from bib.fieldTypes import aff_mod
 
 from django.core import urlresolvers
+from django.conf import settings
 import reversion
+
+# custom actions for czashum
+
+def showCzashum(modeladmin, request, qs):
+    Dw.objects.filter(idjrl__in=qs).update(showCzashum=1)
+    for val in list(qs.values_list('id', flat=True)):
+        Journal.objects.filter(id=val).update(showCzashum=1)
+showCzashum.short_description = "Pokaż w CzasHum"
+
+def hideCzashum(modeladmin, request, qs):
+    Dw.objects.filter(idjrl__in=qs).update(showCzashum=0)
+    for val in list(qs.values_list('id', flat=True)):
+        Journal.objects.filter(id=val).update(showCzashum=0)
+hideCzashum.short_description = "Ukryj w CzasHum"
+    
+def showPdf(modeladmin, request, qs):
+    Dw.objects.filter(idjrl__in=qs).update(showPdf=1)
+    for val in list(qs.values_list('id', flat=True)):
+        Journal.objects.filter(id=val).update(showPdf=1)    
+showPdf.short_description = "Pokaż Pdf w CzasHum"
+
+def hidePdf(modeladmin, request, qs):
+    Dw.objects.filter(idjrl__in=qs).update(showPdf=0)
+    for val in list(qs.values_list('id', flat=True)):
+        Journal.objects.filter(id=val).update(showPdf=0)    
+hidePdf.short_description = "Ukryj Pdf w CzasHum"
+
+def setPromo(modeladmin, request, qs):
+    ids = []
+    for i in qs.values_list('id', flat=True):
+        ids += [i]
+    Journal.objects.filter(id__in=ids).update(czashum_promo=1)
+setPromo.short_description = "Ustaw jako polecane czasopismo"
+
+def unsetPromo(modeladmin, request, qs):
+    ids = []
+    for i in qs.values_list('id', flat=True):
+        ids += [i]
+    Journal.objects.filter(id__in=ids).update(czashum_promo=0)
+unsetPromo.short_description = "Nie pokazuj jako polecane czasopismo"
+
+def indexFullTxt(modeladmin, request, qs):
+    for obj in Dw.objects.filter(idjrl__in=qs):
+        try:
+            with open (settings.MEDIA_ROOT[0] + obj.getFullTxt, "r") as myfile:
+                data=myfile.read().replace('\n', '')
+                obj.fulltext = data
+                obj.save()
+        except IOError:
+            pass
+indexFullTxt.short_description = "Indeksuj pełne teksty"
 
 class baseBibAdmin(reversion.VersionAdmin):
     # fieldName, model, nameObject, parents
@@ -129,13 +181,14 @@ class ArticlePagesInline(admin.TabularInline):
     model = ArticlePages
 
 class ArticleAdmin(baseBibAdmin):
-    list_display = ['nazwa', 'bibliographical_description', 'source']
+#     form = ArticleForm
+    list_display = ['nazwa', 'bibliographical_description'] #, 'source']
     search_fields = ['articlename__name', ]
         # 'number_id__numbername__name', 
         # 'volume_id__volumename__name', 'number_id__volume_id__volumename__name',
         # 'number_id__volume_id__year_id__yearname__name', 'volume_id__year_id__yearname__name', 
         # 'volume_id__year_id__journal_id__journalname__name', 'number_id__volume_id__year_id__journal_id__journalname__name',]
-    list_filter = [JournalListFilter, YearListFilter, VolumeListFilter]
+#     list_filter = [JournalListFilter, YearListFilter, VolumeListFilter]
     inlines = [ArticleNameInline, ArticlePagesInline, ArticleDescriptionInline, ArticleDateInline, ArticleContributorInline, ArticleKeywordsInline, ArticleReferencesInline]
     readonly_fields = ['id', 'legacy_id', 'parent']
 
@@ -216,7 +269,7 @@ class YearAdmin(baseBibAdmin):
     inlines = [YearNameInline, YearContributorInline, YearDateInline]
     list_display = ['source', 'showVolume', 'showNumber']
     readonly_fields = ['id', 'legacy_id', 'parent']
-    list_filter = ['journal_id']
+#     list_filter = ['journal_id']
     search_fields = ['journal_id__journalname__name']
     
     def showVolume(self, obj):
@@ -250,9 +303,10 @@ class JournalAdmin(reversion.VersionAdmin):
     #form = JournalForm
     inlines = [JournalNameInline, JournalContributorInline, JournalDateInline]
     list_display = ['source', 'showYear']
-    list_filter = ['journalname', 'journaldate', 'journalcontributor']
+    list_filter = ['showCzashum', 'showPdf', 'czashum_promo']
     search_fields = ['journalname__name', 'journaldate__text', 'journalcontributor__title']
     readonly_fields = ['id', 'legacy_id', 'parent']
+    actions = [showCzashum, showPdf, setPromo, indexFullTxt, hideCzashum, hidePdf, unsetPromo]
     
     def showYear(self, obj):
         yearCnt = Year.objects.filter(journal_id=obj.id).count()
@@ -260,8 +314,28 @@ class JournalAdmin(reversion.VersionAdmin):
     showYear.allow_tags = True
     showYear.short_description = 'Roczniki'
     
+    
+
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ['key', 'lang']
+    list_filter = ['key', 'lang']
+    search_display = ['key', 'lang']
+    readonly_fields = ['id']
+    
+class JorunalMapAdmin(reversion.VersionAdmin):
+    form = JournalMapForm
+    list_display = ['idjrl', 'iduser']
+    search_fields = ['idjrl', 'iduser']
+
+class DwAdmin(reversion.VersionAdmin):
+    list_display = ['id', 'title1', 'number', 'volume', 'year', 'journal', 'authors', 'publisher']
+    search_fields = ['id', 'title1', 'number', 'volume', 'year', 'journal', 'authors', 'publisher']
+    
+admin.site.register(Dw, DwAdmin)
+admin.site.register(Language, LanguageAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Number, NumberAdmin)
 admin.site.register(Volume, VolumeAdmin)
 admin.site.register(Year, YearAdmin)
 admin.site.register(Journal, JournalAdmin)
+admin.site.register(Journalmap, JorunalMapAdmin)

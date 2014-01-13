@@ -10,8 +10,86 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 # base clases & func
+
+# def exportTxt (qs, format):
+#     from bib.util import yearNameConv, numberNameConv, prepNameForPath
+#     result = ''
+#     sortQuery = []
+#     for obj in qs:
+# #         if not isinstance(obj, basestring):
+# #             if ArticleReview.objects.filter(par_id=obj.id).count() > 0:
+# #                 continue
+#         authors = []
+#         for auth in ArticleContributor.objects.filter(par_id=obj.id, role='author'):
+#             authors += [auth.title]
+#         authors = ', '.join([x for x in authors])
+#         if ArticleName.objects.filter(par_id=obj.id).count() > 0:
+#             title = (ArticleName.objects.filter(par_id=obj.id))[0]
+#         number = obj.sourceWithHier('number')
+#         yearName = ''
+#         volumeName = ''
+#         numberName = ''
+#         if number:
+#             numberName = number.getName
+#         volume = obj.sourceWithHier('volume')
+#         if volume:
+#             volumeName = volume.getName
+#         year = obj.sourceWithHier('year')
+#         if year:
+#             yearName = year.getName
+#         journal = obj.sourceWithHier('journal')
+#         pagesA = []
+#         for page in ArticlePages.objects.filter(par_id=obj.id):
+#             pagesA += [page]
+#         pages = 's.' + ','.join(map(unicode,pagesA))
+#         sortQuery += [{
+#             'id': obj.id, 
+#             'authors': authors, 
+#             'title': title.name_clean, 
+#             'year': yearName, 
+#             'volume': volumeName, 
+#             'number': numberName, 
+#             'journal': journal.__unicode__(), 
+#             'pages': pages,
+#             }]
+#  
+#     sortQuery = sorted(sortQuery, key=lambda k: yearNameConv(k['year']))
+#     sortQuery = sorted(sortQuery, key=lambda k: yearNameConv(k['volume']))
+#     sortQuery = sorted(sortQuery, key=lambda k: numberNameConv(k['number']))
+#          
+#     for obj in sortQuery:
+#         if format == 'bibtex':
+#             result += '''@Article{%s, 
+#  author = "%s",
+#  title = "%s",
+#  year =  %s,
+#  volume =  %s,
+#  number =  %s,
+#  journal =  %s,
+#  pages =  %s,
+# }\n '''  % (obj['id'], obj['authors'], obj['title'], obj['year'], obj['volume'], obj['number'], obj['journal'], obj['pages'])
+#         elif format == 'txt':
+#             result += '''%s, %s, %s, %s, %s, %s ''' % (obj['title'], obj['journal'], obj['year'], obj['volume'], obj['number'], obj['pages'])
+#         elif format == 'ris':
+#             pages = ''
+#             for p in pagesA:
+#                 pages += 'SP - ' + p.page_from + '\n'
+#                 pages += 'EP - ' + p.page_to + '\n'
+#             result += ''' 
+# TY  - JOUR 
+# AU - %s
+# TI - %s
+# PY - %s
+# VL - %s
+# NV - %s
+# JO - %s 
+# %s ''' % (obj['authors'], obj['title'], obj['year'], obj['volume'], obj['number'], obj['journal'], pages)
+     
+#     return result
 
 def getName(self, nameObj):
     names = nameObj.objects.filter(par_id=self)
@@ -73,15 +151,12 @@ def getSource(obj, type='source'):
         return (u'{0}, {1}, {2}, {3}').format(journal, year, volume, number)
     elif isinstance(obj, Number):
         nn = NumberName.objects.filter(par_id=obj.id)
-        #return (u'{0}, {1}, {2}, {3}').format(journal, year, volume, nn[0].name)
         return (u'{0}, {1}, {2}, {3}').format(journal, year, volume, number)
     elif isinstance(obj, Volume):
         vn = VolumeName.objects.filter(id=obj.id)
-        #return (u'{0}, {1}, {2}').format(journal, year, vn[0].name)
         return (u'{0}, {1}, {2}').format(journal, year, volume)
     elif isinstance(obj, Year):
         yn = YearName.objects.filter(id=obj.id)
-        #return (u'{0}, {1}').format(journal, yn[0].name)
         return (u'{0}, {1}').format(journal, year)
     else:
         return (u'{0}').format(journal)
@@ -158,7 +233,14 @@ class AbstractReferences(models.Model):
 
     class Meta:
         abstract = True
-        
+
+class Language(models.Model):
+    id = models.IntegerField(primary_key=True)
+    key = models.CharField(max_length=2L)
+    lang = models.CharField(max_length=255L)
+    class Meta:
+        db_table = 'language'
+      
 # extended clases
 
 class JournalContributor(AbstractContributor):
@@ -207,6 +289,9 @@ class Journal(AbstractMainObj):
     continuatedby = models.CharField(max_length=255L, db_column='continuatedBy', blank=True) # Field name made lowercase.
     frequency = models.CharField(max_length=255L, blank=True)
     www = models.CharField(max_length=255L, blank=True)
+    czashum_promo = models.BooleanField()
+    showCzashum = models.BooleanField(default=False, db_column=u'showCzashum')
+    showPdf = models.BooleanField(default=False, db_column=u'showPdf')
     
     @property
     def getSecondName(self):
@@ -218,7 +303,17 @@ class Journal(AbstractMainObj):
     
     @property
     def getContributor(self):
-        return (JournalContributor.objects.filter(par_id=self)[:1])[0].title
+        if JournalContributor.objects.filter(par_id=self, role='publisher').exists():
+            return (JournalContributor.objects.filter(par_id=self, role='publisher')[:1])[0].title
+        else:
+            return 1
+    
+    @property
+    def getContributorId(self):
+        if JournalContributor.objects.filter(par_id=self, role='publisher').exists():
+            return (JournalContributor.objects.filter(par_id=self, role='publisher')[:1])[0].id
+        else:
+            return 1
     
     class Meta:
         db_table = 'journal'        
@@ -234,6 +329,13 @@ class YearContributor(AbstractContributor):
     firstname = models.CharField(max_length=512L, blank=True)
     class Meta:
         db_table = 'year_contributor'
+        
+class Journalmap(models.Model):
+    idjrl = models.ForeignKey('Journal', db_column=u'idjrl')
+    iduser = models.ForeignKey(User, db_column=u'iduser')
+    class Meta:
+        db_table = 'journalMap'
+        verbose_name = 'Journal Map'        
 
 class YearDate(AbstractDate):
     id = models.AutoField(primary_key=True)
@@ -302,7 +404,14 @@ class Volume(AbstractMainObj):
     baztech_author_email = models.CharField(max_length=512L, blank=True)
     title = models.CharField(max_length=512L, blank=True)
     class Meta:
-        db_table = 'volume'        
+        db_table = 'volume'
+        
+    @property
+    def isAccepted(self):
+        if Dw.objects.filter(idvol=self.id, accepted = False):
+            return ' *'
+        else:
+            return ''        
 
 class NumberContributor(AbstractContributor):
     id = models.AutoField(primary_key=True)
@@ -342,6 +451,13 @@ class Number(AbstractMainObj):
     class Meta:
         db_table = 'number'
         
+    @property
+    def isAccepted(self):
+        if Dw.objects.filter(idno=self.id, accepted = False):
+            return ' *'
+        else:
+            return ''
+        
 class ArticleContributor(AbstractContributor):        
     id = models.AutoField(primary_key=True)
     #par_id = models.IntegerField(null=True, blank=True)
@@ -351,6 +467,21 @@ class ArticleContributor(AbstractContributor):
     title = models.CharField(max_length=255L, blank=True)
     surname = models.CharField(max_length=512L, blank=True)
     firstname = models.CharField(max_length=512L, blank=True)
+    
+    def getCustomTitle(self):
+        authTitle = ''
+        if self.firstname:
+            authTitle = self.firstname.strip()
+        if self.surname:
+            if self.firstname:
+                authTitle += ' '
+            authTitle += self.surname.strip()
+        return authTitle
+        
+    @property
+    def customTitleFiled(self):
+        return self.getCustomTitle()
+        
     class Meta:
         db_table = 'article_contributor'
 
@@ -405,7 +536,7 @@ class ArticlePages(models.Model):
         else:
             return self.page_from + '-' + self.page_to
         
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     par_id = models.ForeignKey('Article', db_column=u'par_id')
     parent = models.CharField(max_length=255L, blank=True)
     page_from = models.CharField(max_length=255L, blank=True)
@@ -425,8 +556,9 @@ class ArticleReferences(AbstractReferences):
 
 class ArticleReview(models.Model):
     def __unicode__(self):
-        return self.title
-    id = models.IntegerField(primary_key=True)
+        return self.full_name
+#         return self.author + ', ' + self.title + ', ' + self.place + ' ' + self.year
+    id = models.AutoField(primary_key=True)
     # par_id = models.IntegerField(null=True, blank=True)
     par_id = models.ForeignKey('Article', db_column=u'par_id', blank=True, null=True)
     parent = models.CharField(max_length=255L)
@@ -434,18 +566,20 @@ class ArticleReview(models.Model):
     author = models.CharField(max_length=255L, blank=True)
     place = models.CharField(max_length=512L, blank=True)
     year = models.CharField(max_length=512L, blank=True)
+    full_name = models.CharField(max_length=2048L, blank=True)
     class Meta:
         db_table = 'article_review'
         
         
 class Article(AbstractMainObj):
     def __unicode__(self):
-        return getName(self, ArticleName)
+        # return getName(self, ArticleName)
+        return self.getName.name_clean
         
     id = models.AutoField(primary_key=True)
-    #number_id = models.IntegerField(null=True, blank=True)
+#     number_id = models.IntegerField(null=True, blank=True)
     number_id = models.ForeignKey(Number, db_column=u'number_id', null=True, blank=True)
-    #volume_id = models.IntegerField(null=True, blank=True)
+#     volume_id = models.IntegerField(null=True, blank=True)
     volume_id = models.ForeignKey(Volume, db_column=u'volume_id', null=True, blank=True)
     legacy_id = models.CharField(max_length=255L, blank=True)
     parent = models.CharField(max_length=255L, blank=True)
@@ -457,17 +591,224 @@ class Article(AbstractMainObj):
     mph_reference = models.CharField(max_length=255L, blank=True)
     baztech_author_email = models.CharField(max_length=512L, blank=True)
     keywords = models.TextField(blank=True)
+#     par_journal = models.ForeignKey(Journal, db_column=u'par_journal', null=True, blank=True)
+#     par_year = models.ForeignKey(Year, db_column=u'par_year', null=True, blank=True)
+#     par_volume = models.ForeignKey(Volume, db_column=u'par_volume', null=True, blank=True, related_name='par_volume')
+    lang = models.CharField(max_length=255L, blank=True)
     
     @property
     def getAuthors(self):
-        authors = ArticleContributor.objects.filter(role='author', par_id=self)
-        # authorsStr = ','.join([x.title for x in authors])
-        # if authors.count() == 0:
-            # name = (ArticleName.objects.filter(par_id=self))[0].name
-            # if name.rsplit("/",1).__len__() == 2:
-                # authorsStr = name.rsplit("/",1)[1]
-                # authors
+        authors = ArticleContributor.objects.filter((Q(role='author') | Q(role='reviewed_work_author')|Q(role='translator')) & Q(par_id=self))
         return authors
+        
+    @property
+    def getPages(self):
+        pages = ArticlePages.objects.filter(par_id=self).order_by('id')
+        return pages
+    
+    def getFirstPageSet(self):
+        pages = ArticlePages.objects.filter(par_id=self).order_by('page_from')
+        return pages[0] if pages else None
+        
+    @property
+    def getLang(self):
+        return (ArticleName.objects.filter(par_id=self.id))[0].lang
     
     class Meta:
         db_table = 'article'
+        
+class Hierarchy(models.Model):
+    def __unicode__(self):
+        return article
+    
+    id = models.IntegerField(primary_key=True)
+    journal = models.ForeignKey(Journal, db_column=u'journal', null=True, blank=True)
+    year = models.ForeignKey(Year, db_column=u'year', null=True, blank=True)
+    volume = models.ForeignKey(Volume, db_column=u'volume', null=True, blank=True)
+    number = models.ForeignKey(Number, db_column=u'number', null=True, blank=True)
+    article = models.ForeignKey(Article, db_column=u'article', null=True, blank=True)
+    # journal = models.IntegerField()
+    # year = models.IntegerField()
+    # volume = models.IntegerField()
+    # number = models.IntegerField()
+    # article = models.IntegerField()
+    class Meta:
+        db_table = 'hierarchy'
+
+class Dw(models.Model):
+    def __unicode__(self):
+        return self.title1
+    
+    id = models.IntegerField(primary_key=True)
+    title1 = models.CharField(max_length=1536L)
+    title2 = models.CharField(max_length=1536L, blank=True)
+    idno = models.ForeignKey(Number, db_column=u'idno', null=True, blank=True)
+    number = models.CharField(max_length=512L, blank=True)
+    idvol = models.ForeignKey(Volume, db_column=u'idvol', null=True, blank=True)
+    volume = models.CharField(max_length=512L, blank=True)
+    idyear = models.ForeignKey(Year, db_column=u'idyear', null=True, blank=True)
+    year = models.CharField(max_length=128L)
+    from_field = models.IntegerField(null=True, db_column='from', blank=True) #                                                                                         Field renamed because it was a Python reserved word.
+    to = models.IntegerField(null=True, blank=True)
+    idjrl = models.ForeignKey(Journal, db_column=u'idjrl', null=True, blank=True)
+    journal = models.CharField(max_length=1024L)
+    lang = models.CharField(max_length=5L)
+    authors = models.CharField(max_length=2048L, blank=True, null=True)
+    publisher = models.CharField(max_length=512, blank=True, null=True)
+    accepted = models.BooleanField(default=False, db_column=u'accepted')
+    showCzashum = models.BooleanField(default=False, db_column=u'showCzashum')
+    showPdf = models.BooleanField(default=False, db_column=u'showPdf')
+    fulltext = models.TextField(blank=True)
+    
+    class Meta:
+        db_table = 'dw'
+        
+    def setAuthors(self):
+        str = ""
+        for a in self.getAuthors:
+            if not str == '':
+                str += ','
+            str += a.getCustomTitle()
+        self.authors = str
+        self.save()
+        return self.id
+    
+    def setPublishers(self):
+        str = ''
+        publishers = JournalContributor.objects.filter(par_id=self.idjrl,role='publisher')
+        if publishers:
+            self.publisher = publishers[0].title
+            self.save()
+        return self.id        
+    
+    @property
+    def isNoAccepted(self):
+        if Dw.objects.filter(idno=self.idno, accepted = False):
+            return ' *'
+        else:
+            return ''
+            
+    @property
+    def isVolAccepted(self):
+        if Dw.objects.filter(idvol=self.idvol, accepted = False):
+            return ' *'
+        else:
+            return ''
+    
+    @property
+    def getAuthors(self):
+        authors = ArticleContributor.objects.filter((Q(role='author') | Q(role='reviewed_work_author')|Q(role='translator')) & Q(par_id=self))
+        return authors
+        
+    @property
+    def getPages(self):
+        pages = ArticlePages.objects.filter(par_id__id=self.id)
+        return pages
+     
+    @property
+    def getPagesString(self):
+        pages = ArticlePages.objects.filter(par_id__id=self.id).order_by('page_from')
+        resStr = ''
+        if pages:
+            resStr += 's. '
+            for p in pages:
+                if resStr == 's. ':
+                    pass
+                else:
+                    resStr += ', ' 
+                resStr += p.__unicode__()
+        return resStr
+    
+    @property
+    def getNameClean(self):
+        if '/' in self.title1: 
+            return self.title1.rpartition('/')[0]
+        else:
+            return self.title1
+        
+    def getSourceName(self):
+        retStr = self.journal + ", " + self.year + ", "
+        if self.volume:
+            retStr += self.volume + ", "
+        if self.number:
+            retStr += self.number + ", "
+        retStr += self.title1
+        return retStr
+    
+#     @property
+#     def getTxtCit(self):
+#         articles = Article.objects.filter(id=self.id)
+#         return exportTxt(articles, 'txt') 
+#      
+#     @property
+#     def getBibCit(self):
+#         articles = Article.objects.filter(id=self.id)
+#         return exportTxt(articles, 'bibtex')
+    
+    @property
+    def getFullTxt(self):
+        from bib.util import prepNameForPath
+        jrlDir = prepNameForPath(unicode(self.journal))
+        if self.year != '' and self.year is not None:
+            jrlDir += '-r' + prepNameForPath(unicode(self.year))
+        jrlDir += '-t' + (prepNameForPath(unicode(self.volume)) if self.volume is not None else '')
+        if self.number != '' and self.number is not None:
+            jrlDir += '-n' + prepNameForPath(unicode(self.number))
+
+        pages = self.getPages
+        pageStr = ''
+        if pages:
+            page = pages[0]
+            if page.page_to != '' and page.page_from != page.page_to:
+                pageStr = '-s' + page.page_from + '-' + page.page_to
+            else:
+                pageStr = '-s' + page.page_from
+        artDir = 'files/' + prepNameForPath(unicode(self.journal)) + '/' + jrlDir + '/' + jrlDir + pageStr        
+        artPdf = artDir + '/' + jrlDir + pageStr + '.txt'
+        return artPdf
+    
+    @property
+    def getPdf(self):
+        from bib.util import prepNameForPath
+        jrlDir = prepNameForPath(unicode(self.journal))
+        if self.year != '' and self.year is not None:
+            jrlDir += '-r' + prepNameForPath(unicode(self.year))
+        jrlDir += '-t' + (prepNameForPath(unicode(self.volume)) if self.volume is not None else '')
+        if self.number != '' and self.number is not None:
+            jrlDir += '-n' + prepNameForPath(unicode(self.number))
+
+        pages = self.getPages
+        pageStr = ''
+        if pages:
+            page = pages[0]
+            if page.page_to != '' and page.page_from != page.page_to:
+                pageStr = '-s' + page.page_from + '-' + page.page_to
+            else:
+                pageStr = '-s' + page.page_from
+        artDir = 'files/' + prepNameForPath(unicode(self.journal)) + '/' + jrlDir + '/' + jrlDir + pageStr        
+        artPdf = artDir + '/' + jrlDir + pageStr + '.pdf'
+        return artPdf            
+
+class FolderHierarchy(models.Model):
+    def __unicode__(self):
+        return self.name
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=512L)
+    parent = models.ForeignKey('FolderHierarchy', null=True, blank=True)
+    user = models.ForeignKey(User, db_column=u'iduser')
+    
+    @property
+    def getArticleCount(self):
+        return Eshelf.objects.filter(parent=self).count()
+    
+class Eshelf(models.Model):
+    id = models.AutoField(primary_key=True)
+    article = models.ForeignKey(Article)
+    parent = models.ForeignKey(FolderHierarchy, null=True, blank=True)
+    user = models.ForeignKey(User, db_column=u'iduser')
+    
+class PasswordReset(models.Model):
+    user = models.ForeignKey(User, db_column=u'iduser')
+    password = models.CharField(max_length=512L)
+    

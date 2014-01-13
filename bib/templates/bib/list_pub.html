@@ -1,0 +1,49 @@
+{% include templ.header %}
+      <div id="content_conteiner" class="wrap">
+        <br>
+<div id="panel_header">
+            <div class="button_wrap">
+               <form method="get" action="{% url 'bib.views.article_mod' %}">
+               <input type="submit" name="" value="Dodaj artykuł do bazy">
+           </form>
+            </div>
+            <div class="header_wrap">
+              <h2>Panel wydawcy</h2>
+            </div>
+          </div>
+
+          <div class="clear"></div>
+
+          <div class="freeze_wrap"> 
+            <div id="freeze">
+                <div class="wrap"> 
+                  <div class="real_box">
+                  <div class="wrap"> 
+                  <div class="margin_check">
+                    <input type="checkbox" name="checkboxMain" id="checkboxMain" value="value" />
+                  </div> 
+                  {% include templ.export %}
+
+                  <p class="go_top"><a href="#" title="">do góry</a></p>
+                </div>
+                <hr>
+              </div></div>
+            </div>
+          </div> 
+
+          <ul class="table_content panel_list full_width"> 
+          	{% for j in jrls %}
+            <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  <input type="checkbox" class="check" name="checkboxA" value="{{ j.id }}" />
+                </div>   
+                <div class="links_box">
+                  <h2><a href="{% url 'bib.views.showJournal' j.id %}" title="">{{ j.getName }}</a></h2>
+                                
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+{% include templ.footer %}

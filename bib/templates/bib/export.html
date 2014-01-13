@@ -1,0 +1,26 @@
+{% load i18n %}
+<div class="links_box">
+  {% if acceptFlag %}
+    	<p>
+    		<form action="" method="get">
+    		<input class="big_button" type="submit" name="accept_next" value="Zatwierdź i przejdź do następnego">
+    		<input class="big_button secondary_button" type="submit" name="edit" value="Popraw">
+    		</form>
+  {% else %}
+  <p>{% trans 'Zaznaczone' %}:&nbsp;&nbsp;
+  <span class="select_wrap">
+    <select name="" id="format" title="Lista">
+        {% for k,v in meta.export.iteritems %}
+            {% if v|length = 2 %}
+                <option value="{{ v.0 }}" {{ v.1 }}>{{ k }}</option>
+            {% else %}
+                <option value="{{ v }}" >{{ k }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>                
+  </span>
+  <input {% if article %} article="{{ article.id }}" {% endif %} type="submit" name="eksportuj" id="eksportuj" value="{% trans 'Eksportuj' %}">
+  {% include templ.eshelf_link %}  
+  {% endif %} 
+</p>          
+</div>

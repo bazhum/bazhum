@@ -1,0 +1,35 @@
+{% include templ.header %}
+<div id="content_conteiner" class="wrap">
+          <div id="panel_header">
+            <div class="button_wrap">
+               &nbsp;
+            </div>
+            <div class="header_wrap">
+              <h2>{{ publisher.title }}</h2>
+            </div>
+          </div>
+
+          <div class="clear"></div>
+
+           
+          <br>
+          <ul class="table_content panel_list full_width"> 
+            <span></span>
+            {% for j in jrls %}
+            <li class="line">
+              <div class="wrap"> 
+                <div class="margin_check">
+                  &nbsp;
+                </div>   
+                <div class="links_box">
+                  <h2><a href="{% url 'bib.views.showJournal' j.id %}" title="">{{ j }}</a></h2>
+                                
+                </div>
+              </div>
+            </li>
+			{% endfor %}
+          </ul>
+
+   
+
+{% include templ.footer %}
